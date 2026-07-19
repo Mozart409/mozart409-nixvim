@@ -4,6 +4,18 @@ pre-commit:
     - name: keep-sorted
       run: keep-sorted {staged_files}
       stage_fixed: true
+    - name: deadnix
+      glob: "*.nix"
+      run: deadnix --edit {staged_files}
+      stage_fixed: true
+pre-push:
+  parallel: true
+  jobs:
+    - name: keep-sorted
+      run: keep-sorted --mode lint {all_files}
+    - name: deadnix
+      glob: "*.nix"
+      run: deadnix --fail {push_files}
 commit-msg:
   jobs:
     - name: cog verify

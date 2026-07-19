@@ -30,6 +30,7 @@
           # keep-sorted start
           claude-code
           cocogitto
+          deadnix
           keep-sorted
           lefthook
           opencode
