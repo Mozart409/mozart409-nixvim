@@ -8,7 +8,6 @@
     plugins.treesitter = {
       enable = true;
 
-      # TODO: Don't think I need this as nixGrammars is true which should auto install these???
       settings = {
         ensureInstalled = [
           # keep-sorted start

@@ -413,14 +413,6 @@
       };
     };
 
-    # TODO: Figure out where to move this
-    # https://nix-community.github.io/nixvim/NeovimOptions/index.html?highlight=extraplugins#extraconfigluapre
-    extraConfigLuaPre = ''
-      if vim.g.have_nerd_font then
-        require('nvim-web-devicons').setup {}
-      end
-    '';
-
     # The line beneath this is called `modeline`. See `:help modeline`
     # https://nix-community.github.io/nixvim/NeovimOptions/index.html?highlight=extraplugins#extraconfigluapost
     extraConfigLuaPost = ''
