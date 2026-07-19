@@ -24,6 +24,10 @@ nvim_bin="$(nix build --no-link --print-out-paths .#nvim)/bin/nvim"
 # loads its config via `-u <initFile>`, so it doesn't need ~/.config at all.
 tmp_home="$(mktemp -d)"
 trap 'rm -rf "$tmp_home"' EXIT
+# Pre-create the XDG dirs plugins expect (e.g. neo-tree's log), so they don't
+# print spurious warnings into the test output.
+mkdir -p "$tmp_home/.local/share/nvim" "$tmp_home/.local/state/nvim" \
+  "$tmp_home/.cache/nvim" "$tmp_home/.config"
 
 check_lua="$tmp_home/check.lua"
 cat >"$check_lua" <<'LUA'
