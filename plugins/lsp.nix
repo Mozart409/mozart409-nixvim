@@ -3,7 +3,6 @@
     extraPackages = with pkgs; [
       # keep-sorted start
       biome
-      # Used to format Lua code
       elixir-ls
       gopls
       gotools
