@@ -4,7 +4,6 @@
     ./plugins/conform.nix
     # Code navigation
     ./plugins/custom/plugins/aerial.nix
-    # ./plugins/custom/plugins/snacks.nix
     ./plugins/custom/plugins/autocommands.nix
     ./plugins/custom/plugins/comment.nix
     ./plugins/custom/plugins/crates.nix
@@ -29,6 +28,7 @@
     ./plugins/custom/plugins/opencode.nix
     #./plugins/custom/plugins/nvim-lightbulb.nix
     ./plugins/custom/plugins/precognition.nix
+    ./plugins/custom/plugins/snacks.nix
     ./plugins/custom/plugins/spectre.nix
     #
     # NOTE: Configure your own plugins `see https://nix-community.github.io/nixvim/`

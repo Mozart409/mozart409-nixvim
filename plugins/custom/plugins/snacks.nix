@@ -126,6 +126,9 @@
     plugins.snacks = {
       enable = true;
       settings = {
+        # Disabled: cosmetic only, and this config was disabled originally to
+        # avoid clashing with the existing indent-blankline / noice setup. We
+        # only want snacks.picker, so keep the overlapping bits off.
         animate = {
           enabled = true;
         };
@@ -134,8 +137,9 @@
           enabled = true;
         };
 
+        # Disabled: noice + dressing already handle vim.ui.input.
         input = {
-          enabled = true;
+          enabled = false;
         };
 
         bufdelete = {
@@ -167,8 +171,9 @@
           enabled = true;
         };
 
+        # Disabled: indent-blankline already draws indent guides.
         indent = {
-          enabled = true;
+          enabled = false;
         };
 
         quickfile = {
@@ -182,13 +187,15 @@
         lazygit = {
           enabled = true;
         };
+        # Disabled: noice already handles notifications.
         notifier = {
-          enabled = true;
+          enabled = false;
           timeout = 3000;
         };
 
+        # Disabled: avoid fighting the existing statuscolumn/sign setup.
         statuscolumn = {
-          enabled = true;
+          enabled = false;
         };
 
         picker = {
