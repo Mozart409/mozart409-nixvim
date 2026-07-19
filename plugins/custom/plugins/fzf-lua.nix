@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{ ...}: {
   programs.nixvim = {
     # Disabled in favor of Telescope (fzf had Tab/selection issues)
     plugins.fzf-lua = {

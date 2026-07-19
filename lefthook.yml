@@ -6,7 +6,7 @@ pre-commit:
       stage_fixed: true
     - name: deadnix
       glob: "*.nix"
-      run: deadnix --edit {staged_files}
+      run: deadnix --edit {all_files}
       stage_fixed: true
 pre-push:
   parallel: true

@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{ ...}: {
   programs.nixvim = {
     colorschemes.cyberdream = {
       enable = false;
