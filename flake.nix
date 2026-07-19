@@ -24,7 +24,7 @@
     home-manager,
     ...
   }:
-    flake-utils.lib.eachDefaultSystem (system: let
+    (flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
@@ -51,8 +51,8 @@
           (home-manager.lib.homeManagerConfiguration {
             inherit pkgs;
             modules = [
-              # Same content as homeModules.default, inlined to avoid a
-              # self-reference (flake-utils nests homeModules under <system>).
+              # Same content as homeModules.default, inlined to keep this
+              # per-system build free of a self-reference.
               ./nixvim.nix
               nixvim.homeModules.nixvim
               {
@@ -91,7 +91,8 @@
           lefthook install
         '';
       };
-
+    }))
+    // {
       # Home Manager module.
       #
       # Import it in your home.nix:
@@ -101,6 +102,10 @@
       # so you do NOT need to add `nixvim.homeModules.nixvim` separately. This
       # is what lets the config run at work with only Nix + Home Manager and no
       # NixOS.
+      #
+      # Kept at the top level (outside eachDefaultSystem) because Home Manager
+      # modules are system-agnostic — nesting them under <system> is what broke
+      # `homeModules.default` for consumers.
       homeModules.default = {pkgs, ...}: {
         imports = [
           # keep-sorted start
@@ -116,5 +121,5 @@
 
       # Alias so `homeModules.nixvim` also works.
       homeModules.nixvim = self.homeModules.default;
-    });
+    };
 }
