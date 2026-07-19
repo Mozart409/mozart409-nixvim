@@ -3,6 +3,34 @@
     extraPackages = with pkgs; [
       gcc15
     ];
+
+    # Pre-warm treesitter parsers shortly after startup. The first file opened
+    # via a picker otherwise triggers a cold, async parse that can race the
+    # cursor set and drop you on line 1 instead of the match. Loading the
+    # parser objects up front makes that first parse effectively synchronous.
+    # Deferred with vim.schedule so it never blocks startup.
+    # https://nix-community.github.io/nixvim/NeovimOptions/autoCmd/index.html
+    autoCmd = [
+      {
+        event = ["VimEnter"];
+        desc = "Pre-warm treesitter parsers";
+        callback.__raw = ''
+          function()
+            vim.schedule(function()
+              local langs = {
+                "bash", "c", "css", "go", "html", "javascript", "json",
+                "lua", "markdown", "nix", "rust", "sql", "tsx",
+                "typescript", "yaml",
+              }
+              for _, lang in ipairs(langs) do
+                pcall(vim.treesitter.language.add, lang)
+              end
+            end)
+          end
+        '';
+      }
+    ];
+
     # Highlight, edit, and navigate code
     # https://nix-community.github.io/nixvim/plugins/treesitter/index.html
     plugins.treesitter = {

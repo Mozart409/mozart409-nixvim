@@ -36,6 +36,15 @@
 
       # You can put your default mappings / updates / etc. in here
       #  See `:help telescope.builtin`
+      #
+      # NOTE: All <leader>s* search mappings are handled by snacks.picker now
+      # (see plugins/custom/plugins/snacks.nix). Telescope's cold open would
+      # sometimes land the cursor on line 1 of a freshly loaded file instead of
+      # the match (treesitter/LSP attach racing the cursor set); snacks' picker
+      # doesn't hit that race. The original Telescope mappings are kept below,
+      # commented out, in case you want to switch back. Telescope stays enabled
+      # for its ui-select extension (vim.ui.select).
+      /*
       keymaps = {
         "<leader>sh" = {
           mode = "n";
@@ -72,13 +81,10 @@
             desc = "[S]earch current [W]ord";
           };
         };
-        "<leader>sg" = {
-          mode = "n";
-          action = "live_grep";
-          options = {
-            desc = "[S]earch by [G]rep";
-          };
-        };
+        # NOTE: <leader>sg (live grep) is handled by snacks.picker instead of
+        # Telescope — see plugins/custom/plugins/snacks.nix. Telescope's cold
+        # open would sometimes land the cursor on line 1 of a fresh file
+        # instead of the grep match; snacks' picker avoids that race.
         "<leader>sd" = {
           mode = "n";
           action = "diagnostics";
@@ -108,13 +114,18 @@
           };
         };
       };
+      */
       settings = {
         extensions.__raw = "{ ['ui-select'] = { require('telescope.themes').get_dropdown() } }";
       };
     };
 
     # https://nix-community.github.io/nixvim/keymaps/index.html
+    # NOTE: These search mappings now live in snacks.picker too (see
+    # plugins/custom/plugins/snacks.nix); the Telescope versions are kept
+    # commented out below in case you want to switch back.
     keymaps = [
+      /*
       # Slightly advanced example of overriding default behavior and theme
       {
         mode = "n";
@@ -166,6 +177,7 @@
           desc = "[S]earch [N]eovim files";
         };
       }
+      */
     ];
   };
 }
