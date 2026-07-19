@@ -4,6 +4,10 @@
   inputs = {
     # keep-sorted start block=yes
     flake-utils.url = "github:numtide/flake-utils";
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixvim = {
       url = "github:nix-community/nixvim";
@@ -17,6 +21,7 @@
     nixpkgs,
     nixvim,
     flake-utils,
+    home-manager,
     ...
   }:
     flake-utils.lib.eachDefaultSystem (system: let
@@ -25,6 +30,43 @@
         config.allowUnfree = true;
       };
     in {
+      # Fully-configured neovim, built by evaluating the Home Manager module
+      # in a throwaway HM config. This is the real test that the config is
+      # valid at the Nix level (all nixvim option names/types check out and
+      # init.lua assembles):
+      #
+      #   nix build .#nvim        # compile-check the config
+      #   nix run   .#nvim        # launch it isolated to eyeball runtime/Lua
+      #   nix flake check         # same build, wired as a flake check
+      #
+      # Note: Nix can't validate the Lua inside `__raw`/plugin config — a bad
+      # picker name only surfaces at runtime, so still smoke-test with `nix run`.
+      packages.nvim =
+        (home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          modules = [
+            # Same content as homeModules.default, inlined to avoid a
+            # self-reference (flake-utils nests homeModules under <system>).
+            ./nixvim.nix
+            nixvim.homeModules.nixvim
+            {
+              programs.nixvim.nixpkgs.source = pkgs.path;
+              home = {
+                username = "nixvim-test";
+                homeDirectory = "/tmp/nixvim-test";
+                stateVersion = "24.11";
+              };
+            }
+          ];
+        })
+        .config
+        .programs
+        .nixvim
+        .build
+        .package;
+
+      checks.nvim = self.packages.${system}.nvim;
+
       devShells.default = pkgs.mkShell {
         packages = with pkgs; [
           # keep-sorted start
