@@ -4,6 +4,17 @@
       # luajitPackages.magick
       imagemagick_light
       fd
+      # Provides the `trash` binary snacks uses to move files to trash
+      # (silences the health-check warning about trash/gio/kioclient).
+      trashy
+      # snacks.image doc renderers:
+      #   ghostscript -> `gs`      : PDF files
+      #   tectonic    -> LaTeX math expressions
+      #   mermaid-cli -> `mmdc`    : Mermaid diagrams
+      # NOTE: mermaid-cli pulls in chromium (large closure). Drop it if you
+      # don't need inline Mermaid rendering.
+      ghostscript
+      tectonic
     ];
 
     # https://nix-community.github.io/nixvim/keymaps/index.html
@@ -150,8 +161,88 @@
         };
 
         dashboard = {
-          # DISABLED in favor of alpha-nvim
-          enabled = false;
+          enabled = true;
+          preset = {
+            # Reused from the old alpha.nix banner.
+            header = ''
+
+                ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗
+                ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║
+                ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║
+                ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║
+                ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║
+                ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝
+            '';
+            # Buttons route through Snacks.dashboard.pick, which uses the
+            # snacks picker that's already enabled below.
+            keys = [
+              {
+                icon = " ";
+                key = "f";
+                desc = "Find File";
+                action = ":lua Snacks.dashboard.pick('files')";
+              }
+              {
+                icon = " ";
+                key = "n";
+                desc = "New File";
+                action = ":ene | startinsert";
+              }
+              {
+                icon = " ";
+                key = "g";
+                desc = "Find Text";
+                action = ":lua Snacks.dashboard.pick('live_grep')";
+              }
+              {
+                icon = " ";
+                key = "r";
+                desc = "Recent Files";
+                action = ":lua Snacks.dashboard.pick('oldfiles')";
+              }
+              {
+                icon = " ";
+                key = "c";
+                desc = "Config";
+                action = ":lua Snacks.dashboard.pick('files', { cwd = vim.fn.stdpath('config') })";
+              }
+              {
+                icon = " ";
+                key = "l";
+                desc = "Lazygit";
+                action = ":lua Snacks.lazygit()";
+              }
+              {
+                icon = " ";
+                key = "q";
+                desc = "Quit";
+                action = ":qa";
+              }
+            ];
+          };
+          sections = [
+            {section = "header";}
+            {
+              section = "keys";
+              gap = 1;
+              padding = 1;
+            }
+            {
+              section = "recent_files";
+              icon = " ";
+              title = "Recent Files";
+              indent = 2;
+              padding = 1;
+            }
+            {
+              section = "projects";
+              icon = " ";
+              title = "Projects";
+              indent = 2;
+              padding = 1;
+            }
+            {section = "startup";}
+          ];
         };
 
         explorer = {
@@ -199,6 +290,13 @@
         };
 
         picker = {
+          # Point snacks' ffi.load() at the sqlite shared library so frecency
+          # and history use SQLite instead of a flat file. On Nix the linker
+          # won't find `libsqlite3.so` by name, so pass its absolute path.
+          db = {
+            sqlite3_path = "${pkgs.sqlite.out}/lib/libsqlite3.so";
+          };
+
           matcher = {
             frecency = true;
             sort_empty = true;
