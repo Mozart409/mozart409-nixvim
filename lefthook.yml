@@ -8,6 +8,9 @@ pre-commit:
       glob: "*.nix"
       run: deadnix --edit {staged_files}
       stage_fixed: true
+    - name: just-fmt
+      run: just --fmt
+      stage_fixed: true
 pre-push:
   parallel: true
   jobs:

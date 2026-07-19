@@ -73,6 +73,7 @@
           claude-code
           cocogitto
           deadnix
+          just
           keep-sorted
           lefthook
           opencode
