@@ -41,29 +41,37 @@
       #
       # Note: Nix can't validate the Lua inside `__raw`/plugin config — a bad
       # picker name only surfaces at runtime, so still smoke-test with `nix run`.
-      packages.nvim =
-        (home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          modules = [
-            # Same content as homeModules.default, inlined to avoid a
-            # self-reference (flake-utils nests homeModules under <system>).
-            ./nixvim.nix
-            nixvim.homeModules.nixvim
-            {
-              programs.nixvim.nixpkgs.source = pkgs.path;
-              home = {
-                username = "nixvim-test";
-                homeDirectory = "/tmp/nixvim-test";
-                stateVersion = "24.11";
-              };
-            }
-          ];
-        })
-        .config
-        .programs
-        .nixvim
-        .build
-        .package;
+      #
+      # In Home Manager mode `build.package` is NOT self-contained: it relies on
+      # the generated init.lua being written to ~/.config/nvim by HM. So we wrap
+      # the package's nvim with `-u <build.initFile>` to get a genuinely
+      # standalone, config-loaded editor that runs correctly under any HOME.
+      packages.nvim = let
+        nixvimCfg =
+          (home-manager.lib.homeManagerConfiguration {
+            inherit pkgs;
+            modules = [
+              # Same content as homeModules.default, inlined to avoid a
+              # self-reference (flake-utils nests homeModules under <system>).
+              ./nixvim.nix
+              nixvim.homeModules.nixvim
+              {
+                programs.nixvim.nixpkgs.source = pkgs.path;
+                home = {
+                  username = "nixvim-test";
+                  homeDirectory = "/tmp/nixvim-test";
+                  stateVersion = "26.05";
+                };
+              }
+            ];
+          })
+          .config
+          .programs
+          .nixvim;
+      in
+        pkgs.writeShellScriptBin "nvim" ''
+          exec ${nixvimCfg.build.package}/bin/nvim -u ${nixvimCfg.build.initFile} "$@"
+        '';
 
       checks.nvim = self.packages.${system}.nvim;
 
