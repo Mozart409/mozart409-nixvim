@@ -19,6 +19,8 @@ pre-push:
     - name: deadnix
       glob: "*.nix"
       run: deadnix --fail {all_files}
+    - name: test
+      run: just test
 commit-msg:
   jobs:
     - name: cog verify
