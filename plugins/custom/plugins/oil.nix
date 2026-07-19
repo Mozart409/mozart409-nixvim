@@ -13,5 +13,19 @@
         };
       };
     };
+
+    # Global launcher: open the parent directory in Oil. Composes with Oil's
+    # in-buffer `-` (go up a dir), so repeated `-` walks up the tree.
+    keymaps = [
+      {
+        mode = "n";
+        key = "-";
+        action = "<CMD>Oil<CR>";
+        options = {
+          desc = "Open parent directory (Oil)";
+          silent = true;
+        };
+      }
+    ];
   };
 }
