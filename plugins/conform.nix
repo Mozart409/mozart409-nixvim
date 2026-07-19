@@ -4,21 +4,23 @@
     #
     # https://nix-community.github.io/nixvim/NeovimOptions/index.html?highlight=extraplugins#extrapackages
     extraPackages = with pkgs; [
+      # keep-sorted start
+      alejandra
+      biome
+      clang-tools
+      d2
+      dprint
+      fixjson
+      go
+      pgformatter
+      ruff
+      rustfmt
+      shfmt
       # Used to format Lua code
       stylua
-      dprint
-      ruff
-      fixjson
-      rustfmt
-      yamlfmt
-      alejandra
-      d2
-      biome
-      shfmt
       terraform
-      clang-tools
-      pgformatter
-      go
+      yamlfmt
+      # keep-sorted end
     ];
 
     # Autoformat

@@ -1,15 +1,17 @@
 {pkgs, ...}: {
   programs.nixvim = {
     extraPackages = with pkgs; [
+      # keep-sorted start
+      biome
       # Used to format Lua code
       elixir-ls
-      gotools
       gopls
+      gotools
       rust-analyzer
-      typescript-language-server
-      typescript
       tofu-ls
-      biome
+      typescript
+      typescript-language-server
+      # keep-sorted end
     ];
 
     # Dependencies

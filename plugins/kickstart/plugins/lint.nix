@@ -31,9 +31,11 @@
         '';
         group = "lint";
         event = [
+          # keep-sorted start
           "BufEnter"
           "BufWritePost"
           "InsertLeave"
+          # keep-sorted end
         ];
       };
     };

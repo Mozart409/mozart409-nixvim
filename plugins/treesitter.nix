@@ -11,6 +11,7 @@
       # TODO: Don't think I need this as nixGrammars is true which should auto install these???
       settings = {
         ensureInstalled = [
+          # keep-sorted start
           "bash"
           "c"
           "c_sharp"
@@ -38,6 +39,7 @@
           "vim"
           "vimdoc"
           "yaml"
+          # keep-sorted end
         ];
 
         highlight = {

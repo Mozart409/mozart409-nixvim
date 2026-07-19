@@ -28,8 +28,10 @@
 
       # Enable Telescope extensions
       extensions = {
+        # keep-sorted start
         fzf-native.enable = true;
         ui-select.enable = true;
+        # keep-sorted end
       };
 
       # You can put your default mappings / updates / etc. in here

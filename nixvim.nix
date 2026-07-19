@@ -93,10 +93,12 @@
 
     performance.byteCompileLua.enable = true;
     extraPlugins = with pkgs.vimPlugins; [
+      # keep-sorted start
+      nvim-web-devicons
       # Useful for getting pretty icons, but requires a Nerd Font.
       plenary-nvim
-      nvim-web-devicons
       vim-devicons
+      # keep-sorted end
     ];
 
     # Cyberdream theme is configured in ./plugins/custom/plugins/cyberdream.nix

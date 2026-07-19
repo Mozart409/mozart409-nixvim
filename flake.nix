@@ -2,12 +2,14 @@
   description = "Mozart409's Neovim configuration, built with nixvim and exposed as a Home Manager module";
 
   inputs = {
+    # keep-sorted start block=yes
+    flake-utils.url = "github:numtide/flake-utils";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixvim = {
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    flake-utils.url = "github:numtide/flake-utils";
+    # keep-sorted end
   };
 
   outputs = {
@@ -49,8 +51,10 @@
       # NixOS.
       homeModules.default = {pkgs, ...}: {
         imports = [
-          nixvim.homeModules.nixvim
+          # keep-sorted start
           ./nixvim.nix
+          nixvim.homeModules.nixvim
+          # keep-sorted end
         ];
 
         # Pin nixvim's nixpkgs to the consuming system's pkgs — silences the
