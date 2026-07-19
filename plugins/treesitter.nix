@@ -1,7 +1,15 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}: {
   programs.nixvim = {
     extraPackages = with pkgs; [
       gcc15
+      # `tree-sitter` CLI — satisfies nvim-treesitter's health check and
+      # enables runtime `:TSInstall`. Grammars themselves are built by Nix.
+      tree-sitter
     ];
 
     # Pre-warm treesitter parsers shortly after startup. The first file opened
@@ -35,6 +43,15 @@
     # https://nix-community.github.io/nixvim/plugins/treesitter/index.html
     plugins.treesitter = {
       enable = true;
+
+      # Install every bundled grammar EXCEPT qmljs, whose upstream query files
+      # fail `:checkhealth` validation ("ERROR qmljs(queries)"). Filtering it out
+      # keeps everything else (latex, vue, svelte, …) available for
+      # snacks.image inline rendering while silencing the error.
+      grammarPackages =
+        builtins.filter
+        (g: !(lib.hasInfix "qmljs" g.name))
+        config.programs.nixvim.plugins.treesitter.package.allGrammars;
 
       settings = {
         ensureInstalled = [
