@@ -26,11 +26,11 @@
       devShells.default = pkgs.mkShell {
         packages = with pkgs; [
           # keep-sorted start
+          claude-code
+          cocogitto
+          keep-sorted
           lefthook
           opencode
-          cocogitto
-          claude-code
-          keep-sorted
           # keep-sorted end
         ];
         shellHook = ''
