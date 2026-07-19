@@ -1,5 +1,12 @@
 {pkgs, ...}: {
   programs.nixvim = {
+    # Stamp a monotonic baseline as early as possible so the dashboard footer
+    # can report startup time. `vim.uv.hrtime()` counts from an arbitrary point,
+    # so we need our own start marker (nixvim has no lazy.nvim to ask).
+    extraConfigLuaPre = ''
+      vim.g.start_time = vim.uv.hrtime()
+    '';
+
     extraPackages = with pkgs; [
       # luajitPackages.magick
       imagemagick_light
@@ -241,7 +248,26 @@
               indent = 2;
               padding = 1;
             }
-            {section = "startup";}
+            # Custom startup-time footer. Replaces the builtin "startup"
+            # section (which requires lazy.nvim's `lazy.stats`), computing the
+            # delta from vim.g.start_time set in extraConfigLuaPre above.
+            {
+              __raw = ''
+                function()
+                  local base = vim.g.start_time or vim.uv.hrtime()
+                  local ms = (vim.uv.hrtime() - base) / 1e6
+                  return {
+                    align = "center",
+                    padding = 1,
+                    text = {
+                      { "⚡ Neovim loaded in ", hl = "footer" },
+                      { string.format("%.0f", ms), hl = "special" },
+                      { " ms", hl = "footer" },
+                    },
+                  }
+                end
+              '';
+            }
           ];
         };
 
