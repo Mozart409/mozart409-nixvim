@@ -5,6 +5,7 @@
     # Code navigation
     ./plugins/custom/plugins/aerial.nix
     ./plugins/custom/plugins/autocommands.nix
+    ./plugins/custom/plugins/carbonfox.nix
     ./plugins/custom/plugins/comment.nix
     ./plugins/custom/plugins/crates.nix
     ./plugins/custom/plugins/cyberdream.nix

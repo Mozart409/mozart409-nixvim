@@ -42,8 +42,8 @@
         },
       })
 
-      -- Apply the colorscheme
-      vim.cmd([[colorscheme vague]])
+      -- Apply the colorscheme (disabled, testing carbonfox instead — see carbonfox.nix)
+      -- vim.cmd([[colorscheme vague]])
     '';
   };
 }
