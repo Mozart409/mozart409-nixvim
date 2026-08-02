@@ -79,7 +79,7 @@
     # https://nix-community.github.io/nixvim/keymaps/index.html
     keymaps = [
       {
-        mode = "";
+        mode = "n";
         key = "<leader>f";
         action.__raw = ''
           function()

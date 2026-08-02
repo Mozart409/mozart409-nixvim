@@ -204,7 +204,7 @@
     keymaps = [
       # Keymaps for custom plugin trouble
       {
-        mode = "";
+        mode = "n";
         key = "<leader>xx";
         action = "<cmd>Trouble diagnostics toggle<cr>";
         # action.__raw = ''
@@ -217,7 +217,7 @@
         };
       }
       {
-        mode = "";
+        mode = "n";
         key = "<leader>xX";
         action = "<cmd>Trouble diagnostics toggle filter.buf=0<cr>";
         options = {
@@ -225,7 +225,7 @@
         };
       }
       {
-        mode = "";
+        mode = "n";
         key = "<leader>cs";
         action = "<cmd>Trouble symbols toggle focus=false<cr>";
         options = {
@@ -233,7 +233,7 @@
         };
       }
       {
-        mode = "";
+        mode = "n";
         key = "<leader>xL";
         action = "<cmd>Trouble loclist toggle<cr>";
         options = {
@@ -241,7 +241,7 @@
         };
       }
       {
-        mode = "";
+        mode = "n";
         key = "<leader>xQ";
         action = "<cmd>Trouble qflist toggle<cr>";
         options = {
