@@ -256,15 +256,6 @@
         action = "<cmd>nohlsearch<CR>";
       }
 
-      {
-        mode = "n";
-        key = "<leader>tt";
-        action = "<cmd>Neogit<cr>";
-        options = {
-          desc = "Neogit";
-        };
-      }
-
       # Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
       # for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
       # is not what someone will guess without a bit more experience.
@@ -339,19 +330,11 @@
         };
       }
       {
-        key = "<leader>gg";
-        mode = "n";
-        action = "<cmd>Neogit<cr>";
-        options = {
-          desc = "Open Neogit";
-        };
-      }
-      {
         key = "<leader>S";
         mode = "n";
-        action = ''
-          <cmd>lua require("spectre").open_visual({select_word=true})<CR>
-        '';
+        # NOTE: single-quoted string, not an `''…''` block — the block form
+        # keeps its trailing newline, which ends up in the rhs as a stray <NL>.
+        action = "<cmd>lua require(\"spectre\").open_visual({select_word=true})<CR>";
         options = {
           desc = "Open Spectre";
         };

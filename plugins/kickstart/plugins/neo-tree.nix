@@ -44,11 +44,15 @@
     # https://nix-community.github.io/nixvim/keymaps/index.html
 
     keymaps = [
+      # NOTE: was <leader>fe, but <leader>f (conform format) is a prefix of it.
+      # Every <leader>f then stalled for `timeoutlen` (300ms) waiting to see if
+      # an `e` followed, and <leader>fe had to be typed inside that window.
       {
-        key = "<leader>fe";
+        mode = "n";
+        key = "<leader>e";
         action = "<cmd>Neotree reveal<cr>";
         options = {
-          desc = "NeoTree reveal";
+          desc = "[E]xplorer reveal (NeoTree)";
         };
       }
     ];
