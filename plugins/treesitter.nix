@@ -77,53 +77,13 @@
       #    - Treesitter + textobjects: https://nix-community.github.io/nixvim/plugins/treesitter-textobjects/index.html
     };
 
-    plugins.treesitter-textobjects = {
-      enable = true;
-      settings = {
-        select = {
-          enable = true;
-          lookahead = true;
-          keymaps = {
-            "af" = "@function.outer";
-            "if" = "@function.inner";
-            "ac" = "@class.outer";
-            "ic" = "@class.inner";
-            "aa" = "@parameter.outer";
-            "ia" = "@parameter.inner";
-          };
-        };
-
-        move = {
-          enable = true;
-          set_jumps = true;
-          goto_next_start = {
-            "]m" = "@function.outer";
-            "]a" = "@parameter.inner";
-          };
-          goto_next_end = {
-            "]M" = "@function.outer";
-            "]A" = "@parameter.inner";
-          };
-          goto_previous_start = {
-            "[m" = "@function.outer";
-            "[a" = "@parameter.inner";
-          };
-          goto_previous_end = {
-            "[M" = "@function.outer";
-            "[A" = "@parameter.inner";
-          };
-        };
-
-        swap = {
-          enable = true;
-          swap_next = {
-            ">a" = "@parameter.inner";
-          };
-          swap_previous = {
-            "<a" = "@parameter.inner";
-          };
-        };
-      };
-    };
+    # NOTE: nvim-treesitter-textobjects was configured here via
+    # `settings.{select,move,swap}`, but the `main` branch dropped the module
+    # system those keys feed, so none of af/if/ac/ic/aa/ia, ]m/[m, ]a/[a or
+    # >a/<a were ever bound — and ]a/[a silently fell through to Neovim's
+    # built-in :next/:previous, which looked like it worked. Removed rather
+    # than left as dead config. To bring it back, enable the plugin and map
+    # the keys explicitly against the main-branch API
+    # (`require('nvim-treesitter-textobjects.select').select_textobject`, …).
   };
 }
