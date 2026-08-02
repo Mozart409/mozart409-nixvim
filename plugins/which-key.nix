@@ -32,14 +32,8 @@
             __unkeyed-1 = "<leader>t";
             group = "[T]oggle";
           }
-          {
-            __unkeyed-1 = "<leader>h";
-            group = "Git [H]unk";
-            mode = [
-              "n"
-              "v"
-            ];
-          }
+          # NOTE: no "<leader>h" / Git [H]unk group — gitsigns is configured for
+          # signs only and defines no keymaps, so the group rendered empty.
         ];
       };
     };
