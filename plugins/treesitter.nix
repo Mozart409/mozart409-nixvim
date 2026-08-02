@@ -44,6 +44,22 @@
     plugins.treesitter = {
       enable = true;
 
+      # Native Nixvim options for the modern nvim-treesitter `main` branch.
+      # (The legacy equivalents under `settings.{highlight,indent}` are upstream
+      # nvim-treesitter options and emit deprecation warnings on eval.)
+      highlight = {
+        enable = true;
+        # Some languages depend on vim's regex highlighting system (such as
+        # Ruby) for indent rules.
+        enableVimSyntax = true;
+      };
+
+      indent = {
+        enable = true;
+        disable = ["ruby"];
+      };
+
+      # Grammars are provided by Nix, never by `:TSInstall`/`ensure_installed`.
       # Install every bundled grammar EXCEPT qmljs, whose upstream query files
       # fail `:checkhealth` validation ("ERROR qmljs(queries)"). Filtering it out
       # keeps everything else (latex, vue, svelte, …) available for
@@ -53,60 +69,12 @@
         (g: !(lib.hasInfix "qmljs" g.name))
         config.programs.nixvim.plugins.treesitter.package.allGrammars;
 
-      settings = {
-        ensureInstalled = [
-          # keep-sorted start
-          "bash"
-          "c"
-          "c_sharp"
-          "css"
-          "cue"
-          "diff"
-          "gitcommit"
-          "go"
-          "html"
-          "javascript"
-          "json"
-          "jsonc"
-          "lua"
-          "luadoc"
-          "markdown"
-          "markdown_inline"
-          "nix"
-          "proto"
-          "query"
-          "razor"
-          "rust"
-          "sql"
-          "tsx"
-          "typescript"
-          "vim"
-          "vimdoc"
-          "yaml"
-          # keep-sorted end
-        ];
-
-        highlight = {
-          enable = true;
-
-          # Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-          additional_vim_regex_highlighting = true;
-        };
-
-        indent = {
-          enable = true;
-          disable = [
-            "ruby"
-          ];
-        };
-
-        # There are additional nvim-treesitter modules that you can use to interact
-        # with nvim-treesitter. You should go explore a few and see what interests you:
-        #
-        #    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-        #    - Show your current context: https://nix-community.github.io/nixvim/plugins/treesitter-context/index.html
-        #    - Treesitter + textobjects: https://nix-community.github.io/nixvim/plugins/treesitter-textobjects/index.html
-      };
+      # There are additional nvim-treesitter modules that you can use to interact
+      # with nvim-treesitter. You should go explore a few and see what interests you:
+      #
+      #    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
+      #    - Show your current context: https://nix-community.github.io/nixvim/plugins/treesitter-context/index.html
+      #    - Treesitter + textobjects: https://nix-community.github.io/nixvim/plugins/treesitter-textobjects/index.html
     };
 
     plugins.treesitter-textobjects = {
