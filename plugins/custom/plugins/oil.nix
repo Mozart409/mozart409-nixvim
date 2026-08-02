@@ -4,6 +4,10 @@
       oil = {
         enable = true;
         settings = {
+          # Don't hijack directory buffers. Otherwise `nvim .` opens Oil at
+          # startup, beating neo-tree's netrw hijack (see neo-tree.nix).
+          # Oil stays reachable on demand via `-`.
+          default_file_explorer = false;
           delete_to_trash = true;
           skip_confirm_for_simple_edits = true;
           use_default_keymaps = true;
