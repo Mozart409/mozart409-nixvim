@@ -190,6 +190,15 @@
           };
         };
 
+        # NOTE: these use snacks.picker, not telescope. Telescope's cold open
+        # would sometimes land the cursor on line 1 of a freshly loaded file
+        # instead of the target (treesitter/LSP attach racing the cursor set);
+        # the same reason the <leader>s* mappings moved in snacks.nix.
+        #
+        # Keys follow Neovim 0.11's built-in `gr*` LSP prefix so we override
+        # those defaults rather than shadowing them. Binding bare `gr` made
+        # every built-in grn/gra/gri/grr/grt/grx wait out `timeoutlen`, and
+        # `gI` shadowed the built-in "insert at column 1" command.
         extra = [
           # Jump to the definition of the word under your cusor.
           #  This is where a variable was first declared, or where a function is defined, etc.
@@ -197,7 +206,7 @@
           {
             mode = "n";
             key = "gd";
-            action.__raw = "function() require('telescope.builtin').lsp_definitions() end";
+            action.__raw = "function() require('snacks').picker.lsp_definitions() end";
             options = {
               desc = "LSP: [G]oto [D]efinition";
             };
@@ -205,8 +214,8 @@
           # Find references for the word under your cursor.
           {
             mode = "n";
-            key = "gr";
-            action.__raw = "function() require('telescope.builtin').lsp_references() end";
+            key = "grr";
+            action.__raw = "function() require('snacks').picker.lsp_references() end";
             options = {
               desc = "LSP: [G]oto [R]eferences";
             };
@@ -215,8 +224,8 @@
           #  Useful when your language has ways of declaring types without an actual implementation.
           {
             mode = "n";
-            key = "gI";
-            action.__raw = "function() require('telescope.builtin').lsp_implementations() end";
+            key = "gri";
+            action.__raw = "function() require('snacks').picker.lsp_implementations() end";
             options = {
               desc = "LSP: [G]oto [I]mplementation";
             };
@@ -227,7 +236,7 @@
           {
             mode = "n";
             key = "<leader>D";
-            action.__raw = "function() require('telescope.builtin').lsp_type_definitions() end";
+            action.__raw = "function() require('snacks').picker.lsp_type_definitions() end";
             options = {
               desc = "LSP: Type [D]efinition";
             };
@@ -237,7 +246,7 @@
           {
             mode = "n";
             key = "<leader>ds";
-            action.__raw = "function() require('telescope.builtin').lsp_document_symbols() end";
+            action.__raw = "function() require('snacks').picker.lsp_symbols() end";
             options = {
               desc = "LSP: [D]ocument [S]ymbols";
             };
@@ -247,7 +256,7 @@
           {
             mode = "n";
             key = "<leader>ws";
-            action.__raw = "function() require('telescope.builtin').lsp_workspace_symbols() end";
+            action.__raw = "function() require('snacks').picker.lsp_workspace_symbols() end";
             options = {
               desc = "LSP: [W]orkspace [S]ymbols";
             };
