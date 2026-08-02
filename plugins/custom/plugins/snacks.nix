@@ -356,6 +356,27 @@
               }
             '';
           };
+
+          # Upstream binds <Tab>/<S-Tab> to select_and_next/select_and_prev.
+          # Hitting Tab in the prompt (e.g. expecting path completion) then
+          # silently multi-selects a row, and <CR> confirms the *selection*
+          # instead of the row under the cursor — you open a file you never
+          # highlighted. Tab now just moves; <C-Space> does the selecting.
+          # These merge into snacks' defaults, so everything else is untouched.
+          win = {
+            input.keys = {
+              "<Tab>".__raw = ''{ "list_down", mode = { "i", "n" } }'';
+              "<S-Tab>".__raw = ''{ "list_up", mode = { "i", "n" } }'';
+              "<c-space>".__raw = ''{ "select_and_next", mode = { "i", "n" } }'';
+              "<c-s-space>".__raw = ''{ "select_and_prev", mode = { "i", "n" } }'';
+            };
+            list.keys = {
+              "<Tab>".__raw = ''{ "list_down", mode = { "n", "x" } }'';
+              "<S-Tab>".__raw = ''{ "list_up", mode = { "n", "x" } }'';
+              "<c-space>".__raw = ''{ "select_and_next", mode = { "n", "x" } }'';
+              "<c-s-space>".__raw = ''{ "select_and_prev", mode = { "n", "x" } }'';
+            };
+          };
         };
         keys = {};
       };
