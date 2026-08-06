@@ -9,7 +9,21 @@
 
     extraPackages = with pkgs; [
       # luajitPackages.magick
-      imagemagick_light
+      #
+      # NOT `imagemagick_light`: that build ships only fftw/lcms/raw/uhdr/zlib/
+      # zstd, so snacks.image fails every conversion with "no decode delegate
+      # for this image format" — png and jpeg included.
+      #
+      # The override drops delegates nvim never renders inline (X11 viewer,
+      # DjVu, OpenEXR); 209 MB -> 201 MB closure with no loss for image preview.
+      # Dropping librsvgSupport as well would save another ~28 MB but takes
+      # cairo/pango with it, i.e. no inline SVG rendering.
+      (imagemagick.override {
+        libX11Support = false;
+        libXtSupport = false;
+        djvulibreSupport = false;
+        openexrSupport = false;
+      })
       fd
       # Provides the `trash` binary snacks uses to move files to trash
       # (silences the health-check warning about trash/gio/kioclient).
