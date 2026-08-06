@@ -78,16 +78,20 @@
 
     # https://nix-community.github.io/nixvim/keymaps/index.html
     keymaps = [
+      # NOTE: lives under <leader>c, not bare <leader>f. <leader>f is the
+      # explorer prefix (<leader>fe); binding format to <leader>f made every
+      # format stall for `timeoutlen` while nvim waited to see if an `e`
+      # followed. Both are instant now that they don't share a prefix.
       {
         mode = "n";
-        key = "<leader>f";
+        key = "<leader>cf";
         action.__raw = ''
           function()
             require('conform').format { async = true, lsp_fallback = true }
           end
         '';
         options = {
-          desc = "[F]ormat buffer";
+          desc = "[C]ode [F]ormat buffer";
         };
       }
     ];

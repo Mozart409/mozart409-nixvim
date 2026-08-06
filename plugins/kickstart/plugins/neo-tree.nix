@@ -44,9 +44,17 @@
     # https://nix-community.github.io/nixvim/keymaps/index.html
 
     keymaps = [
-      # NOTE: was <leader>fe, but <leader>f (conform format) is a prefix of it.
-      # Every <leader>f then stalled for `timeoutlen` (300ms) waiting to see if
-      # an `e` followed, and <leader>fe had to be typed inside that window.
+      # <leader>fe is the primary map; <leader>e is kept as a shorter alias.
+      # Nothing else lives under <leader>f now (conform format moved to
+      # <leader>cf), so neither one waits on `timeoutlen`.
+      {
+        mode = "n";
+        key = "<leader>fe";
+        action = "<cmd>Neotree reveal<cr>";
+        options = {
+          desc = "[F]ile [E]xplorer reveal (NeoTree)";
+        };
+      }
       {
         mode = "n";
         key = "<leader>e";

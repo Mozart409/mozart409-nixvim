@@ -17,6 +17,10 @@
             group = "[D]ocument";
           }
           {
+            __unkeyed-1 = "<leader>f";
+            group = "[F]ile";
+          }
+          {
             __unkeyed-1 = "<leader>r";
             group = "[R]ename";
           }
