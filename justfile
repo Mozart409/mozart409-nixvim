@@ -16,3 +16,10 @@ build: clear
 
 test: build
     ./scripts/test-keymaps.sh
+
+sync-remote:
+    git fetch --all
+    git pull origin main
+    git pull forgejo main
+    git push origin main
+    git push forgejo main
