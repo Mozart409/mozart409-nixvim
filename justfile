@@ -17,7 +17,7 @@ build: clear
 test: build
     ./scripts/test-keymaps.sh
 
-sync-remote:
+sync-remotes:
     git fetch --all
     git pull origin main
     git pull forgejo main
