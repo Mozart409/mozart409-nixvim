@@ -5,10 +5,12 @@ My personal Neovim configuration, built with [nixvim](https://github.com/nix-com
 ## Features
 
 - Modular plugin configuration — each plugin lives in its own `.nix` file under `plugins/`
-- LSP, completion (nvim-cmp), Tree-sitter, Telescope/FZF-Lua, linting, formatting
-- Git integration (Neogit, Gitsigns), Oil file explorer, Trouble diagnostics, and more
-- Nerd Font support with web-devicons
+- LSP via Neovim's native `vim.lsp.config` (nixvim `lsp.servers`), blink.cmp completion, Tree-sitter, snacks.nvim picker/dashboard/image, nvim-lint, conform formatting
+- Lazy-loaded plugins through `lz.n` (~55 ms headless startup)
+- Git integration (Neogit, Diffview, Gitsigns, lazygit), Oil + Neo-tree file explorers, Trouble diagnostics, heirline statusline, vague colorscheme
+- Nerd Font icons via nvim-web-devicons
 - Wayland and X11 clipboard support
+- Headless contract tests (`just test` / `nix flake check`) that verify keymaps resolve and startup is error-free
 
 ## Requirements
 
@@ -18,10 +20,13 @@ My personal Neovim configuration, built with [nixvim](https://github.com/nix-com
 
 ### External Tools (for full plugin functionality)
 
-- `git`, `gcc`
+- `git`
 - [ripgrep](https://github.com/BurntSushi/ripgrep)
 - Clipboard tool (`wl-clipboard` on Wayland, `xclip`/`xsel` on X11)
-- Language toolchains as needed (e.g. `go`, `nodejs`, `rustc`)
+- A terminal with the kitty graphics protocol (kitty, WezTerm, Ghostty) for inline images
+- Project toolchains from your devShell where the config deliberately doesn't ship them: `rustc`/`cargo`/`rustfmt` (rust-analyzer prefers the one on `$PATH`), `nodejs`
+
+The Home Manager module evaluates without `allowUnfree`.
 
 ## Installation
 
@@ -88,7 +93,7 @@ let
   });
 in {
   imports = [
-    nixvim.homeManagerModules.nixvim
+    nixvim.homeModules.nixvim
     ./mozart409-nixvim/nixvim.nix
   ];
 }
@@ -116,7 +121,7 @@ let
   });
 in {
   imports = [
-    nixvim.homeManagerModules.nixvim
+    nixvim.homeModules.nixvim
     ./mozart409-nixvim/nixvim.nix
   ];
 }
@@ -132,8 +137,23 @@ home-manager switch
 
 Fork this repo and edit the config to your liking:
 
-- **`nixvim.nix`** — top-level options, keymaps, auto commands, and plugin imports
+- **`nixvim.nix`** — top-level options, keymaps, auto commands, diagnostics, and plugin imports
 - **`plugins/`** — individual plugin configurations; add new plugins here and import them in `nixvim.nix`
+- **`scripts/check-keymaps.lua`** — the contract tests; add new `<leader>` maps to its tables
+
+## Development
+
+```sh
+nix develop          # just, alejandra, statix, deadnix, keep-sorted, lefthook, cocogitto
+just build           # nix build .#nvim
+just run             # launch the built config, isolated from ~/.config/nvim
+just test            # build + headless contract checks
+just fmt             # alejandra
+just lint            # deadnix, statix, alejandra --check, keep-sorted
+nix flake check      # build + the same contract checks, sandboxed
+```
+
+lefthook runs `keep-sorted`, `deadnix`, and `just fmt` on commit, and `just lint` + `just test` on push.
 
 Change the `flake.nix` input URL to point to your fork, or reference it locally:
 
