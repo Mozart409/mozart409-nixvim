@@ -8,20 +8,21 @@ pre-commit:
       glob: "*.nix"
       run: deadnix --edit {staged_files}
       stage_fixed: true
+    - name: alejandra
+      glob: "*.nix"
+      run: just fmt {staged_files}
+      stage_fixed: true
     - name: just-fmt
       run: just --fmt
       stage_fixed: true
 pre-push:
   parallel: true
   jobs:
-    - name: keep-sorted
-      run: keep-sorted --mode lint {all_files}
-    - name: deadnix
-      glob: "*.nix"
-      run: deadnix --fail {all_files}
+    - name: lint
+      run: just lint
     - name: test
       run: just test
 commit-msg:
   jobs:
     - name: cog verify
-      run: cog verify --file {1}
+      run: cog verify --file {1} --ignore-merge-commits
