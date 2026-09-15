@@ -72,7 +72,15 @@ local expected_maps = {
   ["<leader>xX"]  = "trouble buffer diagnostics",
   ["<leader>xL"]  = "trouble location list",
   ["<leader>xQ"]  = "trouble quickfix list",
-  ["<leader>yd2"] = "d2 preview copy",
+  ["grn"]         = "inc-rename on the builtin rename key",
+  ["-"]           = "oil parent directory",
+  ["]t"]          = "next todo comment",
+  ["[t"]          = "previous todo comment",
+}
+
+-- CONTRACT 2b: maps the config deliberately removes at VimEnter must be gone.
+local expected_absent = {
+  ["<leader>yd2"] = "d2-vim default map, deleted in d2.nix",
 }
 
 -- CONTRACT 3: no <leader> map may be a strict prefix of another <leader> map.
@@ -84,6 +92,7 @@ local expected_maps = {
 -- Add a genuinely intentional pair here as "<leader>x -> <leader>xy".
 local allowed_prefix_collisions = {}
 
+local function run_checks()
 local leader = vim.g.mapleader or "\\"
 local function expand(key) return (key:gsub("<leader>", leader)) end
 local function pretty(lhs) return "<leader>" .. lhs:sub(#leader + 1) end
@@ -141,6 +150,13 @@ for _, key in ipairs(map_keys) do
   end
 end
 
+-- Contract 2b -------------------------------------------------------------
+for _, key in ipairs(sorted_keys(expected_absent)) do
+  if existing[expand(key)] then
+    fails[#fails + 1] = key .. "  : mapped, but should have been removed (" .. expected_absent[key] .. ")"
+  end
+end
+
 -- Contract 3 --------------------------------------------------------------
 table.sort(leader_lhs)
 local collisions = 0
@@ -168,6 +184,25 @@ else
     #picker_keys, #map_keys, #leader_lhs))
   vim.cmd("quitall")
 end
+end
+
+-- `-c` commands run BEFORE VimEnter, so anything the config does at VimEnter
+-- (d2.nix's deferred keymap deletion, for one) would be invisible here. Wait
+-- for VimEnter, then let two rounds of vim.schedule() drain first.
+vim.api.nvim_create_autocmd("VimEnter", {
+  once = true,
+  callback = function()
+    vim.schedule(function()
+      vim.schedule(function()
+        local ok, err = pcall(run_checks)
+        if not ok then
+          io.stderr:write("FAIL: check script errored: " .. tostring(err) .. "\n")
+          vim.cmd("cquit 1")
+        end
+      end)
+    end)
+  end,
+})
 LUA
 
 echo "==> Checking keymaps in a headless nvim ..."
