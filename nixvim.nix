@@ -19,6 +19,7 @@
     ./plugins/custom/plugins/nvim-navic.nix
     ./plugins/custom/plugins/oil.nix
     ./plugins/custom/plugins/precognition.nix
+    ./plugins/custom/plugins/schemastore.nix
     ./plugins/custom/plugins/snacks.nix
     ./plugins/custom/plugins/spectre.nix
     ./plugins/custom/plugins/todo-comments.nix
@@ -106,6 +107,26 @@
       smartindent = true;
       tabstop = 2;
       termguicolors = true;
+      winborder = "rounded";
+    };
+
+    diagnostic.settings = {
+      severity_sort = true;
+      float.source = "if_many";
+      signs.text.__raw = ''
+        {
+          [vim.diagnostic.severity.ERROR] = '󰅚 ',
+          [vim.diagnostic.severity.WARN] = '󰀪 ',
+          [vim.diagnostic.severity.INFO] = '󰋽 ',
+          [vim.diagnostic.severity.HINT] = '󰌶 ',
+        }
+      '';
+      virtual_text = {
+        current_line = false;
+        spacing = 2;
+        source = "if_many";
+      };
+      virtual_lines.current_line = true;
     };
 
     keymaps = [
