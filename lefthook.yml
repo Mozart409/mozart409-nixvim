@@ -24,4 +24,4 @@ pre-push:
 commit-msg:
   jobs:
     - name: cog verify
-      run: cog verify --file {1} --ignore-merge-commits
+      run: cog verify --file {1}
