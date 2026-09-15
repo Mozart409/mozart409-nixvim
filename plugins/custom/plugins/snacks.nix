@@ -1,23 +1,10 @@
 {pkgs, ...}: {
   programs.nixvim = {
-    # Stamp a monotonic baseline as early as possible so the dashboard footer
-    # can report startup time. `vim.uv.hrtime()` counts from an arbitrary point,
-    # so we need our own start marker (nixvim has no lazy.nvim to ask).
     extraConfigLuaPre = ''
       vim.g.start_time = vim.uv.hrtime()
     '';
 
     extraPackages = with pkgs; [
-      # luajitPackages.magick
-      #
-      # NOT `imagemagick_light`: that build ships only fftw/lcms/raw/uhdr/zlib/
-      # zstd, so snacks.image fails every conversion with "no decode delegate
-      # for this image format" — png and jpeg included.
-      #
-      # The override drops delegates nvim never renders inline (X11 viewer,
-      # DjVu, OpenEXR); 209 MB -> 201 MB closure with no loss for image preview.
-      # Dropping librsvgSupport as well would save another ~28 MB but takes
-      # cairo/pango with it, i.e. no inline SVG rendering.
       (imagemagick.override {
         libX11Support = false;
         libXtSupport = false;
@@ -25,25 +12,11 @@
         openexrSupport = false;
       })
       fd
-      # Provides the `trash` binary snacks uses to move files to trash
-      # (silences the health-check warning about trash/gio/kioclient).
       trashy
-      # snacks.image doc renderers:
-      #   ghostscript -> `gs`      : PDF files
-      #   tectonic    -> LaTeX math expressions
-      #   mermaid-cli -> `mmdc`    : Mermaid diagrams
-      # NOTE: mermaid-cli pulls in chromium (large closure). Drop it if you
-      # don't need inline Mermaid rendering.
       ghostscript
       tectonic
     ];
 
-    # https://nix-community.github.io/nixvim/keymaps/index.html
-    #
-    # Search mappings moved here from Telescope (see plugins/telescope.nix).
-    # Telescope's cold open occasionally jumps to line 1 of a freshly loaded
-    # file rather than the match (treesitter/LSP attach racing the cursor set);
-    # the snacks picker doesn't hit that race.
     keymaps = [
       {
         mode = "n";
@@ -153,14 +126,19 @@
           desc = "[S]earch [N]eovim files";
         };
       }
+      {
+        mode = "n";
+        key = "<leader>lg";
+        action.__raw = "function() require('snacks').lazygit() end";
+        options = {
+          desc = "[L]azy[G]it";
+        };
+      }
     ];
 
     plugins.snacks = {
       enable = true;
       settings = {
-        # Disabled: cosmetic only, and this config was disabled originally to
-        # avoid clashing with the existing indent-blankline / noice setup. We
-        # only want snacks.picker, so keep the overlapping bits off.
         animate = {
           enabled = true;
         };
@@ -169,9 +147,8 @@
           enabled = true;
         };
 
-        # Disabled: noice + dressing already handle vim.ui.input.
         input = {
-          enabled = false;
+          enabled = true;
         };
 
         bufdelete = {
@@ -184,18 +161,15 @@
         dashboard = {
           enabled = true;
           preset = {
-            # Reused from the old alpha.nix banner.
             header = ''
 
-                ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗
-                ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║
-                ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║
-                ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║
-                ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║
-                ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝
+              ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗
+              ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║
+              ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║
+              ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║
+              ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║
+              ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝
             '';
-            # Buttons route through Snacks.dashboard.pick, which uses the
-            # snacks picker that's already enabled below.
             keys = [
               {
                 icon = " ";
@@ -262,9 +236,6 @@
               indent = 2;
               padding = 1;
             }
-            # Custom startup-time footer. Replaces the builtin "startup"
-            # section (which requires lazy.nvim's `lazy.stats`), computing the
-            # delta from vim.g.start_time set in extraConfigLuaPre above.
             {
               __raw = ''
                 function()
@@ -302,7 +273,6 @@
           enabled = true;
         };
 
-        # Disabled: indent-blankline already draws indent guides.
         indent = {
           enabled = false;
         };
@@ -318,21 +288,18 @@
         lazygit = {
           enabled = true;
         };
-        # Disabled: noice already handles notifications.
         notifier = {
           enabled = false;
           timeout = 3000;
         };
 
-        # Disabled: avoid fighting the existing statuscolumn/sign setup.
         statuscolumn = {
           enabled = false;
         };
 
         picker = {
-          # Point snacks' ffi.load() at the sqlite shared library so frecency
-          # and history use SQLite instead of a flat file. On Nix the linker
-          # won't find `libsqlite3.so` by name, so pass its absolute path.
+          enabled = true;
+          ui_select = true;
           db = {
             sqlite3_path = "${pkgs.sqlite.out}/lib/libsqlite3.so";
           };
@@ -371,12 +338,6 @@
             '';
           };
 
-          # Upstream binds <Tab>/<S-Tab> to select_and_next/select_and_prev.
-          # Hitting Tab in the prompt (e.g. expecting path completion) then
-          # silently multi-selects a row, and <CR> confirms the *selection*
-          # instead of the row under the cursor — you open a file you never
-          # highlighted. Tab now just moves; <C-Space> does the selecting.
-          # These merge into snacks' defaults, so everything else is untouched.
           win = {
             input.keys = {
               "<Tab>".__raw = ''{ "list_down", mode = { "i", "n" } }'';
@@ -392,7 +353,6 @@
             };
           };
         };
-        keys = {};
       };
     };
   };
