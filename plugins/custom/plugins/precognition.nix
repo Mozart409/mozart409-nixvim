@@ -1,62 +1,83 @@
-{pkgs, ...}: {
+{
   programs.nixvim = {
-    # precognition.nvim is available as an extraPlugin
-    extraPlugins = with pkgs.vimPlugins; [
-      precognition-nvim
-    ];
-
-    # precognition.nvim configuration
-    extraConfigLua = ''
-      require("precognition").setup({
-        -- Start with hints visible
-        startVisible = false,
-
-        -- Show blank virtual line
-        showBlankVirtLine = true,
-
-        -- Highlight color configuration
-        highlightColor = { link = "Comment" },
-
-        -- Horizontal motion hints
+    plugins.precognition = {
+      enable = true;
+      lazyLoad.settings.cmd = ["Precognition"];
+      settings = {
+        startVisible = false;
+        showBlankVirtLine = true;
+        highlightColor.link = "Comment";
         hints = {
-          Caret = { text = "^", prio = 2 },
-          Dollar = { text = "$", prio = 1 },
-          MatchingPair = { text = "%", prio = 5 },
-          Zero = { text = "0", prio = 1 },
-          w = { text = "w", prio = 10 },
-          b = { text = "b", prio = 9 },
-          e = { text = "e", prio = 8 },
-          W = { text = "W", prio = 7 },
-          B = { text = "B", prio = 6 },
-          E = { text = "E", prio = 5 },
-        },
-
-        -- Vertical motion hints (gutter)
+          Caret = {
+            text = "^";
+            prio = 2;
+          };
+          Dollar = {
+            text = "$";
+            prio = 1;
+          };
+          MatchingPair = {
+            text = "%";
+            prio = 5;
+          };
+          Zero = {
+            text = "0";
+            prio = 1;
+          };
+          w = {
+            text = "w";
+            prio = 10;
+          };
+          b = {
+            text = "b";
+            prio = 9;
+          };
+          e = {
+            text = "e";
+            prio = 8;
+          };
+          W = {
+            text = "W";
+            prio = 7;
+          };
+          B = {
+            text = "B";
+            prio = 6;
+          };
+          E = {
+            text = "E";
+            prio = 5;
+          };
+        };
         gutterHints = {
-          G = { text = "G", prio = 10 },
-          gg = { text = "gg", prio = 9 },
-          PrevParagraph = { text = "{", prio = 8 },
-          NextParagraph = { text = "}", prio = 8 },
-        },
-
-        -- Disabled filetypes
-        disabled_fts = {
-          "startify",
-          "dashboard",
-          "alpha",
-          "neo-tree",
-          "Trouble",
-          "trouble",
-          "lazy",
-          "mason",
-          "notify",
-          "toggleterm",
-          "lazyterm",
-        },
-      })
-    '';
-
-    # Optional keymaps for toggling precognition
+          G = {
+            text = "G";
+            prio = 10;
+          };
+          gg = {
+            text = "gg";
+            prio = 9;
+          };
+          PrevParagraph = {
+            text = "{";
+            prio = 8;
+          };
+          NextParagraph = {
+            text = "}";
+            prio = 8;
+          };
+        };
+        disabled_fts = [
+          "snacks_dashboard"
+          "neo-tree"
+          "oil"
+          "Trouble"
+          "trouble"
+          "notify"
+          "snacks_terminal"
+        ];
+      };
+    };
     keymaps = [
       {
         mode = "n";
@@ -70,21 +91,13 @@
             end
           end
         '';
-        options = {
-          desc = "[T]oggle [P]recognition";
-        };
+        options.desc = "[T]oggle [P]recognition";
       }
       {
         mode = "n";
         key = "<leader>up";
-        action.__raw = ''
-          function()
-            require("precognition").peek()
-          end
-        '';
-        options = {
-          desc = "Precognition Peek";
-        };
+        action.__raw = "function() require('precognition').peek() end";
+        options.desc = "Precognition Peek";
       }
     ];
   };
