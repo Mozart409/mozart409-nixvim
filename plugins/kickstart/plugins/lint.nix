@@ -13,7 +13,7 @@ _: {
         '';
         group = "lint";
         event = [
-          "BufEnter"
+          "BufReadPost"
           "BufWritePost"
           "InsertLeave"
         ];

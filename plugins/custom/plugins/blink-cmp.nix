@@ -3,6 +3,7 @@
     friendly-snippets.enable = true;
     blink-cmp = {
       enable = true;
+      setupLspCapabilities = false;
       settings = {
         keymap = {
           preset = "default";

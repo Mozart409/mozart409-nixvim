@@ -1,4 +1,4 @@
-{ ...}: {
+_: {
   programs.nixvim = {
     # Add zenburn plugin (disabled)
     # extraPlugins = with pkgs.vimPlugins; [

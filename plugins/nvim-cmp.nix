@@ -1,7 +1,7 @@
 {
-  programs.nixvim = {
-    plugins.luasnip.enable = true;
-    plugins.friendly-snippets.enable = true;
+  programs.nixvim.plugins = {
+    luasnip.enable = true;
+    friendly-snippets.enable = true;
     # `friendly-snippets` contains a variety of premade snippets
     #    See the README about individual language/framework/plugin snippets:
     #    https://github.com/rafamadriz/friendly-snippets
@@ -10,7 +10,7 @@
     # Autocompletion
     # See `:help cmp`
     # https://nix-community.github.io/nixvim/plugins/cmp/index.html
-    plugins.cmp = {
+    cmp = {
       enable = true;
 
       settings = {

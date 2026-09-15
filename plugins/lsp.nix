@@ -6,125 +6,117 @@
       # keep-sorted end
     ];
 
+    plugins.lspconfig.enable = true;
+
     plugins.fidget = {
       enable = true;
       lazyLoad.settings.event = ["LspAttach"];
     };
 
-    autoGroups = {
-      "kickstart-lsp-attach".clear = true;
-    };
+    lsp = {
+      inlayHints.enable = false;
 
-    plugins.lsp = {
-      enable = true;
       servers = {
-        clangd.enable = true;
-        gopls.enable = true;
-        pyright.enable = true;
+        "*".config.capabilities.__raw = "require('blink.cmp').get_lsp_capabilities()";
+
         bashls.enable = true;
+        biome.enable = true;
+        clangd.enable = true;
+        csharp_ls.enable = false;
+        cssls.enable = true;
         cue.enable = true;
-        dprint.enable = true;
+        elixirls.enable = false;
+        gopls.enable = true;
         html.enable = true;
         htmx = {
           enable = true;
-          filetypes = ["html" "templ"];
+          config.filetypes = ["html" "templ"];
         };
-        biome.enable = true;
-        yamlls.enable = true;
-        cssls.enable = true;
-        marksman.enable = true;
-        nil_ls.enable = true;
-        postgres_lsp.enable = true;
-        protols.enable = true;
-        rust_analyzer = {
-          enable = true;
-          installCargo = false;
-          installRustc = false;
-        };
-        elixirls.enable = false;
+        jsonls.enable = true;
         just.enable = true;
-        tofu_ls.enable = true;
-        csharp_ls.enable = false;
         lua_ls = {
           enable = true;
-          settings = {
+          config.settings.Lua = {
             completion.callSnippet = "Replace";
             diagnostics.disable = ["missing-fields"];
           };
         };
-      };
-      keymaps = {
-        diagnostic = {
-          "<leader>q" = {
-            action = "setloclist";
-            desc = "Open diagnostic [Q]uickfix list";
-          };
+        marksman.enable = true;
+        nil_ls.enable = true;
+        postgres_lsp.enable = true;
+        protols.enable = true;
+        pyright.enable = true;
+        rust_analyzer = {
+          enable = true;
+          packageFallback = true;
         };
-        extra = [
-          {
-            mode = "n";
-            key = "gd";
-            action.__raw = "function() require('snacks').picker.lsp_definitions() end";
-            options.desc = "LSP: [G]oto [D]efinition";
-          }
-          {
-            mode = "n";
-            key = "grr";
-            action.__raw = "function() require('snacks').picker.lsp_references() end";
-            options.desc = "LSP: [G]oto [R]eferences";
-          }
-          {
-            mode = "n";
-            key = "gri";
-            action.__raw = "function() require('snacks').picker.lsp_implementations() end";
-            options.desc = "LSP: [G]oto [I]mplementation";
-          }
-          {
-            mode = "n";
-            key = "grt";
-            action.__raw = "function() require('snacks').picker.lsp_type_definitions() end";
-            options.desc = "LSP: Goto [T]ype definition";
-          }
-          {
-            mode = "n";
-            key = "gO";
-            action.__raw = "function() require('snacks').picker.lsp_symbols() end";
-            options.desc = "LSP: Document symbols";
-          }
-          {
-            mode = "n";
-            key = "<leader>D";
-            action.__raw = "function() require('snacks').picker.lsp_type_definitions() end";
-            options.desc = "LSP: Type [D]efinition";
-          }
-          {
-            mode = "n";
-            key = "<leader>ds";
-            action.__raw = "function() require('snacks').picker.lsp_symbols() end";
-            options.desc = "LSP: [D]ocument [S]ymbols";
-          }
-          {
-            mode = "n";
-            key = "<leader>ws";
-            action.__raw = "function() require('snacks').picker.lsp_workspace_symbols() end";
-            options.desc = "LSP: [W]orkspace [S]ymbols";
-          }
-        ];
-        lspBuf = {
-          "<leader>ca" = {
-            action = "code_action";
-            desc = "LSP: [C]ode [A]ction";
-          };
-          "gra" = {
-            action = "code_action";
-            desc = "LSP: Code [A]ction";
-          };
-          "gD" = {
-            action = "declaration";
-            desc = "LSP: [G]oto [D]eclaration";
-          };
-        };
+        tofu_ls.enable = true;
+        yamlls.enable = true;
       };
+
+      keymaps = [
+        {
+          key = "<leader>q";
+          action.__raw = "vim.diagnostic.setloclist";
+          options.desc = "Open diagnostic [Q]uickfix list";
+        }
+        {
+          key = "gd";
+          action.__raw = "function() require('snacks').picker.lsp_definitions() end";
+          options.desc = "LSP: [G]oto [D]efinition";
+        }
+        {
+          key = "gD";
+          lspBufAction = "declaration";
+          options.desc = "LSP: [G]oto [D]eclaration";
+        }
+        {
+          key = "grr";
+          action.__raw = "function() require('snacks').picker.lsp_references() end";
+          options.desc = "LSP: [G]oto [R]eferences";
+        }
+        {
+          key = "gri";
+          action.__raw = "function() require('snacks').picker.lsp_implementations() end";
+          options.desc = "LSP: [G]oto [I]mplementation";
+        }
+        {
+          key = "grt";
+          action.__raw = "function() require('snacks').picker.lsp_type_definitions() end";
+          options.desc = "LSP: Goto [T]ype definition";
+        }
+        {
+          key = "gO";
+          action.__raw = "function() require('snacks').picker.lsp_symbols() end";
+          options.desc = "LSP: Document symbols";
+        }
+        {
+          key = "gra";
+          lspBufAction = "code_action";
+          options.desc = "LSP: Code [A]ction";
+        }
+        {
+          key = "<leader>ca";
+          lspBufAction = "code_action";
+          options.desc = "LSP: [C]ode [A]ction";
+        }
+        {
+          key = "<leader>D";
+          action.__raw = "function() require('snacks').picker.lsp_type_definitions() end";
+          options.desc = "LSP: Type [D]efinition";
+        }
+        {
+          key = "<leader>ds";
+          action.__raw = "function() require('snacks').picker.lsp_symbols() end";
+          options.desc = "LSP: [D]ocument [S]ymbols";
+        }
+        {
+          key = "<leader>ws";
+          action.__raw = "function() require('snacks').picker.lsp_workspace_symbols() end";
+          options.desc = "LSP: [W]orkspace [S]ymbols";
+        }
+      ];
+
       onAttach = ''
         local map = function(keys, func, desc)
           vim.keymap.set('n', keys, func, { buffer = bufnr, desc = 'LSP: ' .. desc })

@@ -1,9 +1,7 @@
 {
-  programs.nixvim = {
-    plugins = {
-      schemastore = {
-        enable = true;
-      };
-    };
+  programs.nixvim.plugins.schemastore = {
+    enable = true;
+    json.enable = true;
+    yaml.enable = true;
   };
 }
