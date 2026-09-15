@@ -31,7 +31,6 @@
     ./plugins/kickstart/plugins/lint.nix
     ./plugins/kickstart/plugins/neo-tree.nix
     ./plugins/lsp.nix
-    ./plugins/mini.nix
     ./plugins/treesitter.nix
     ./plugins/which-key.nix
     # keep-sorted end
@@ -200,6 +199,9 @@
       }
     ];
 
-    plugins.sleuth.enable = true;
+    plugins = {
+      sleuth.enable = true;
+      web-devicons.enable = true;
+    };
   };
 }
