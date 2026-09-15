@@ -61,13 +61,13 @@
     keymaps = [
       {
         mode = "n";
-        key = "<leader>cf";
+        key = "<leader>m";
         action.__raw = ''
           function()
             require('conform').format { async = true, lsp_format = "fallback" }
           end
         '';
-        options.desc = "[C]ode [F]ormat buffer";
+        options.desc = "For[m]at buffer";
       }
     ];
   };
