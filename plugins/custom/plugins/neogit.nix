@@ -2,12 +2,13 @@
   programs.nixvim = {
     plugins.neogit = {
       enable = true;
+      lazyLoad.settings.cmd = ["Neogit"];
       settings = {
         kind = "auto";
         commit_popup.kind = "split";
         integrations = {
           diffview = true;
-          fzf_lua = true;
+          snacks = true;
         };
         signs = {
           hunk = ["" ""];
@@ -16,7 +17,16 @@
         };
       };
     };
-    # Enable diffview for better diff viewing in Neogit
-    plugins.diffview.enable = true;
+    plugins.diffview = {
+      enable = true;
+      lazyLoad.settings.cmd = [
+        "DiffviewOpen"
+        "DiffviewClose"
+        "DiffviewFileHistory"
+        "DiffviewToggleFiles"
+        "DiffviewFocusFiles"
+        "DiffviewRefresh"
+      ];
+    };
   };
 }

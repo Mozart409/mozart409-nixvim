@@ -1,13 +1,9 @@
-{ ...}: {
+_: {
   programs.nixvim.plugins.todo-comments = {
     enable = true;
-
     settings = {
-      # Show icons in signs column
       signs = true;
       sign_priority = 8;
-
-      # Keywords configuration
       keywords = {
         FIX = {
           icon = " ";
@@ -44,11 +40,6 @@
       };
     };
   };
-
-  # Keymaps for jumping between todos.
-  # The plugin module's `keymaps` option only exposes picker actions
-  # (TodoFzfLua/QuickFix/LocList/Trouble/Telescope), so jump_next/jump_prev
-  # are wired up as plain Lua keymaps instead.
   programs.nixvim.keymaps = [
     {
       mode = "n";

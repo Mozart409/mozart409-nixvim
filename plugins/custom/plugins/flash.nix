@@ -1,7 +1,3 @@
 {
-  programs.nixvim = {
-    plugins.flash = {
-      enable = true;
-    };
-  };
+  programs.nixvim.plugins.flash.enable = true;
 }

@@ -1,13 +1,10 @@
 {
-  programs.nixvim = {
-    plugins = {
-      trouble = {
-        enable = true;
-        settings = {
-          auto_refresh = true;
-          focus = true;
-        };
-      };
+  programs.nixvim.plugins.trouble = {
+    enable = true;
+    lazyLoad.settings.cmd = ["Trouble"];
+    settings = {
+      auto_refresh = true;
+      focus = true;
     };
   };
 }
