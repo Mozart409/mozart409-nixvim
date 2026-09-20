@@ -7,6 +7,7 @@
 --   2b. maps the config deliberately removes at VimEnter are really gone
 --   3. no <leader> map is a strict prefix of another (timeoutlen stalls)
 --   4. startup leaves no errors or deprecation notices in :messages
+--   5. the statusline renders with a diagnostic of every severity present
 --
 -- Exits 0 on PASS, non-zero on any violation.
 
@@ -166,6 +167,35 @@ if vim.v.errmsg ~= "" then
   fails[#fails + 1] = "v:errmsg  : " .. vim.v.errmsg
 end
 
+-- Contract 5 --------------------------------------------------------------
+-- The heirline Diagnostics component is gated on `has_diagnostics`, so a bad
+-- highlight in it (an hl group name where a color belongs, say) never fires at
+-- startup and only surfaces once an LSP reports something. Set one diagnostic
+-- of every severity and force a full statusline eval so each branch renders.
+local sev = vim.diagnostic.severity
+local diag_buf = vim.api.nvim_create_buf(false, true)
+vim.api.nvim_buf_set_lines(diag_buf, 0, -1, false, { "x" })
+vim.api.nvim_set_current_buf(diag_buf)
+local diag_ns = vim.api.nvim_create_namespace("check-keymaps")
+local ok_diag, diag_err = pcall(function()
+  vim.diagnostic.set(diag_ns, diag_buf, {
+    { lnum = 0, col = 0, message = "e", severity = sev.ERROR },
+    { lnum = 0, col = 0, message = "w", severity = sev.WARN },
+    { lnum = 0, col = 0, message = "i", severity = sev.INFO },
+    { lnum = 0, col = 0, message = "h", severity = sev.HINT },
+  })
+  local ok_heirline, heirline = pcall(require, "heirline")
+  if not ok_heirline then error("require('heirline') failed") end
+  local rendered = heirline.statusline:eval()
+  if type(rendered) ~= "string" or rendered == "" then
+    error("statusline evaluated to " .. vim.inspect(rendered))
+  end
+end)
+if not ok_diag then
+  fails[#fails + 1] = "statusline with diagnostics  : " .. tostring(diag_err)
+end
+vim.diagnostic.reset(diag_ns, diag_buf)
+
 -- Report ------------------------------------------------------------------
 if #fails > 0 then
   io.stderr:write("FAIL: " .. #fails .. " problem(s):\n")
@@ -173,7 +203,7 @@ if #fails > 0 then
   vim.cmd("cquit 1")
 else
   io.stdout:write(string.format(
-    "PASS: %d picker keymaps resolve, %d keymaps present, %d <leader> maps free of prefix collisions, startup clean\n",
+    "PASS: %d picker keymaps resolve, %d keymaps present, %d <leader> maps free of prefix collisions, startup clean, statusline renders diagnostics\n",
     #picker_keys, #map_keys, #leader_lhs))
   vim.cmd("quitall")
 end

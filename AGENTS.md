@@ -46,6 +46,7 @@ Runs after `VimEnter` in a temporary HOME, never touches real config. Contracts:
 2b. Maps the config deliberately deletes (d2-vim defaults) are absent
 3. No `<leader>` key is a prefix of another `<leader>` key (avoids `timeoutlen` stalls)
 4. `:messages` contains no errors or deprecation notices after startup
+5. The heirline statusline evaluates with a diagnostic of every severity set (the Diagnostics component is condition-gated, so its highlights are otherwise never exercised at startup)
 
 Allowed prefix collisions are listed in `allowed_prefix_collisions` inside the script.
 

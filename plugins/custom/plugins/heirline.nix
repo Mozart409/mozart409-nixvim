@@ -6,6 +6,17 @@
     extraConfigLua = ''
       do
         local conditions = require('heirline.conditions')
+        local utils = require('heirline.utils')
+        -- heirline's `hl.fg` expects a color, not a highlight group name;
+        -- resolve the Diagnostic* groups into named colors instead.
+        local function setup_colors()
+          return {
+            diag_error = utils.get_highlight('DiagnosticError').fg,
+            diag_warn = utils.get_highlight('DiagnosticWarn').fg,
+            diag_info = utils.get_highlight('DiagnosticInfo').fg,
+            diag_hint = utils.get_highlight('DiagnosticHint').fg,
+          }
+        end
         local Space = { provider = ' ' }
         local Align = { provider = '%=' }
         local ViMode = {
@@ -72,19 +83,19 @@
           { provider = '[' },
           {
             provider = function(self) return self.errors > 0 and (self.error_icon .. self.errors .. ' ') end,
-            hl = { fg = 'DiagnosticError' },
+            hl = { fg = 'diag_error' },
           },
           {
             provider = function(self) return self.warnings > 0 and (self.warn_icon .. self.warnings .. ' ') end,
-            hl = { fg = 'DiagnosticWarn' },
+            hl = { fg = 'diag_warn' },
           },
           {
             provider = function(self) return self.info > 0 and (self.info_icon .. self.info .. ' ') end,
-            hl = { fg = 'DiagnosticInfo' },
+            hl = { fg = 'diag_info' },
           },
           {
             provider = function(self) return self.hints > 0 and (self.hint_icon .. self.hints) end,
-            hl = { fg = 'DiagnosticHint' },
+            hl = { fg = 'diag_hint' },
           },
           { provider = ']' },
         }
@@ -116,6 +127,7 @@
           statusline = { ViMode, Space, Git, FileName, Space, Diagnostics, Align, LSPActive, Ruler },
           winbar = Breadcrumbs and { Breadcrumbs } or nil,
           opts = {
+            colors = setup_colors,
             disable_winbar_cb = function(args)
               return conditions.buffer_matches({
                 buftype = { 'nofile', 'prompt', 'help', 'quickfix', 'terminal' },
@@ -123,6 +135,10 @@
               }, args.buf)
             end,
           },
+        })
+        vim.api.nvim_create_autocmd('ColorScheme', {
+          group = vim.api.nvim_create_augroup('heirline-colors', { clear = true }),
+          callback = function() utils.on_colorscheme(setup_colors) end,
         })
       end
     '';
