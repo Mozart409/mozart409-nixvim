@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.1.1 - 2026-09-20
+#### Bug Fixes
+- (**heirline**) use resolved colors instead of highlight group names - (671c433) - Amadeus Mader
+
+- - -
+
 ## 0.1.0 - 2026-09-15
 #### Features
 - (**cog**) add cog config - (2033201) - Amadeus Mader
