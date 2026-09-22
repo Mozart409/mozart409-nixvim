@@ -70,3 +70,9 @@ Import lists and dev shell packages use `keep-sorted` marker comments. Run `keep
 `just lint` — `deadnix --fail`, `statix check`, `alejandra --check`, `keep-sorted --mode lint`.
 `just fmt` — `alejandra` (accepts file arguments; lefthook passes staged files).
 `lefthook` — auto-installed via `shellHook`: pre-commit runs keep-sorted, deadnix, `just fmt`, `just --fmt`; pre-push runs `just lint` and `just test`.
+
+## Git conventions
+
+- **Work directly on `main`.** Never create a feature branch; this repo has a single author and a linear history.
+- **Never push.** Committing is in scope, pushing is not — the maintainer handles pushes.
+- **Subject-only commit messages.** A short conventional subject (`type(scope): summary`) and nothing else — no body, no bullet lists, no `Co-Authored-By` trailer. `cog verify` runs as a commit-msg hook and enforces the conventional format. Split unrelated work into separate commits rather than explaining one commit in a body.
