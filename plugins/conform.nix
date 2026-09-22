@@ -2,10 +2,10 @@
   programs.nixvim = {
     extraPackages = with pkgs; [
       # keep-sorted start
-      (d2.override {withImageSupport = false;})
       alejandra
       biome
       clang-tools
+      d2
       dprint
       fixjson
       opentofu
