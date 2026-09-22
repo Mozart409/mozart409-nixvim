@@ -13,8 +13,6 @@
       })
       fd
       trashy
-      ghostscript
-      tectonic
     ];
 
     keymaps = [

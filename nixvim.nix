@@ -63,6 +63,11 @@
     defaultEditor = true;
 
     withRuby = false;
+    withPython3 = false;
+
+    # gitsigns/neogit/snacks only shell out to plain git; full git drags in
+    # perl for git-p4, gitweb and send-email.
+    dependencies.git.package = pkgs.gitMinimal;
 
     performance.byteCompileLua.enable = true;
     extraPlugins = with pkgs.vimPlugins; [

@@ -1,11 +1,5 @@
-{pkgs, ...}: {
+_: {
   programs.nixvim = {
-    extraPackages = with pkgs; [
-      # keep-sorted start
-      gotools
-      # keep-sorted end
-    ];
-
     plugins.lspconfig.enable = true;
 
     plugins.fidget = {
@@ -21,7 +15,6 @@
 
         bashls.enable = true;
         biome.enable = true;
-        clangd.enable = true;
         csharp_ls.enable = false;
         cssls.enable = true;
         cue.enable = true;
@@ -41,7 +34,6 @@
             diagnostics.disable = ["missing-fields"];
           };
         };
-        marksman.enable = true;
         nil_ls.enable = true;
         postgres_lsp.enable = true;
         protols.enable = true;

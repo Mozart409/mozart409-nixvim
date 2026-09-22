@@ -4,7 +4,6 @@
       # keep-sorted start
       alejandra
       biome
-      clang-tools
       d2
       dprint
       fixjson
@@ -53,7 +52,6 @@
           nix = ["alejandra"];
           terraform = ["tofu_fmt"];
           hcl = ["tofu_fmt"];
-          proto = ["clang-format"];
           sql = ["pg_format"];
         };
       };

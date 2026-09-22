@@ -1,10 +1,5 @@
-{pkgs, ...}: {
+_: {
   programs.nixvim = {
-    extraPackages = with pkgs; [
-      chafa
-      libcaca
-      viu
-    ];
     plugins.fff = {
       enable = false;
       autoLoad = false;
