@@ -89,13 +89,7 @@
         '';
     });
 
-    devShells = forAllSystems (pkgs: let
-      # claude-code and opencode are unfree; keep that confined to the dev shell.
-      unfree = import pkgs.path {
-        inherit (pkgs.stdenv.hostPlatform) system;
-        config.allowUnfree = true;
-      };
-    in {
+    devShells = forAllSystems (pkgs: {
       default = pkgs.mkShell {
         packages = with pkgs; [
           # keep-sorted start
@@ -106,8 +100,6 @@
           keep-sorted
           lefthook
           statix
-          unfree.claude-code
-          unfree.opencode
           # keep-sorted end
         ];
         shellHook = ''
