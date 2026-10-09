@@ -22,6 +22,7 @@
     ./plugins/custom/plugins/schemastore.nix
     ./plugins/custom/plugins/snacks.nix
     ./plugins/custom/plugins/spectre.nix
+    ./plugins/custom/plugins/spell.nix
     ./plugins/custom/plugins/todo-comments.nix
     ./plugins/custom/plugins/trouble.nix
     ./plugins/custom/plugins/typescript-tools.nix
