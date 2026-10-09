@@ -29,6 +29,11 @@ lint:
     alejandra --check .
     keep-sorted --mode lint $(git ls-files '*.nix' justfile lefthook.yml)
 
+update: clear
+    nix flake update
+    git add flake.lock
+    git commit -m "chore(deps): update flake inputs" -- flake.lock
+
 sync-remotes:
     git fetch --all
     git pull origin main
