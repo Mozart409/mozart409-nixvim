@@ -15,6 +15,13 @@
       yamlfmt
       # keep-sorted end
     ];
+    # After PATH so a project's own toolchain (devShell) wins over these.
+    extraPackagesAfter = with pkgs; [
+      # keep-sorted start
+      gotools
+      rustfmt
+      # keep-sorted end
+    ];
     plugins.conform-nvim = {
       enable = true;
       lazyLoad.settings = {
