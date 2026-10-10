@@ -244,7 +244,7 @@
         };
 
         indent = {
-          enabled = false;
+          enabled = true;
         };
 
         quickfile = {
