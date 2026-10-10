@@ -8,6 +8,7 @@
         # keep-sorted start
         bash
         c
+        comment
         cpp
         css
         csv
@@ -41,6 +42,7 @@
         markdown
         markdown_inline
         nix
+        printf
         proto
         python
         query
