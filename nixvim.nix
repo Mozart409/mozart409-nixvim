@@ -8,6 +8,7 @@
     ./plugins/custom/plugins/crates.nix
     ./plugins/custom/plugins/d2.nix
     ./plugins/custom/plugins/flash.nix
+    ./plugins/custom/plugins/grug-far.nix
     ./plugins/custom/plugins/heirline.nix
     ./plugins/custom/plugins/inc-rename.nix
     ./plugins/custom/plugins/lz-n.nix
@@ -18,7 +19,6 @@
     ./plugins/custom/plugins/precognition.nix
     ./plugins/custom/plugins/schemastore.nix
     ./plugins/custom/plugins/snacks.nix
-    ./plugins/custom/plugins/spectre.nix
     ./plugins/custom/plugins/spell.nix
     ./plugins/custom/plugins/todo-comments.nix
     ./plugins/custom/plugins/trouble.nix
@@ -203,12 +203,6 @@
         key = "<C-k>";
         action = "<C-w><C-k>";
         options.desc = "Move focus to the upper window";
-      }
-      {
-        mode = "n";
-        key = "<leader>S";
-        action = "<cmd>lua require(\"spectre\").open_visual({select_word=true})<CR>";
-        options.desc = "Open Spectre";
       }
     ];
 
