@@ -26,6 +26,13 @@ local expected_pickers = {
   ["<leader><leader>"] = "buffers",
   ["<leader>/"]        = "lines",
   ["<leader>s/"]       = "grep_buffers",
+  ["<leader>st"]       = "todo_comments",
+}
+
+-- Picker sources registered by a lazy-loaded plugin's setup. The keymap
+-- require()s the plugin first; do the same before checking the source exists.
+local picker_requires = {
+  ["<leader>st"] = "todo-comments",
 }
 
 -- CONTRACT 2: these maps must exist and have an action. No picker involved —
@@ -114,6 +121,12 @@ end
 local picker_keys = sorted_keys(expected_pickers)
 for _, key in ipairs(picker_keys) do
   local src = expected_pickers[key]
+  if picker_requires[key] then
+    local ok_req, req_err = pcall(require, picker_requires[key])
+    if not ok_req then
+      fails[#fails + 1] = key .. "  : require('" .. picker_requires[key] .. "') failed: " .. tostring(req_err)
+    end
+  end
   local m = existing[expand(key)]
   if not m then
     fails[#fails + 1] = key .. "  : not mapped"

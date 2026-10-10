@@ -113,6 +113,18 @@
       }
       {
         mode = "n";
+        key = "<leader>st";
+        action.__raw = ''
+          function()
+            -- todo-comments registers this picker source in its setup.
+            require('todo-comments')
+            require('snacks').picker.todo_comments()
+          end
+        '';
+        options.desc = "[S]earch [T]odo comments";
+      }
+      {
+        mode = "n";
         key = "<leader>gg";
         action.__raw = "function() require('snacks').lazygit() end";
         options.desc = "[G]it: lazy[g]it";
