@@ -113,11 +113,52 @@
       }
       {
         mode = "n";
-        key = "<leader>lg";
+        key = "<leader>gg";
         action.__raw = "function() require('snacks').lazygit() end";
-        options = {
-          desc = "[L]azy[G]it";
-        };
+        options.desc = "[G]it: lazy[g]it";
+      }
+      {
+        mode = "n";
+        key = "<leader>gl";
+        action.__raw = "function() require('snacks').lazygit.log() end";
+        options.desc = "[G]it: [l]og (lazygit)";
+      }
+      {
+        mode = "n";
+        key = "<leader>gf";
+        action.__raw = "function() require('snacks').lazygit.log_file() end";
+        options.desc = "[G]it: current [f]ile history (lazygit)";
+      }
+      {
+        mode = ["n" "x"];
+        key = "<leader>gb";
+        action.__raw = "function() require('snacks').gitbrowse() end";
+        options.desc = "[G]it: [b]rowse on remote";
+      }
+      {
+        mode = "n";
+        key = "<leader>bd";
+        action.__raw = "function() require('snacks').bufdelete() end";
+        options.desc = "[B]uffer [d]elete";
+      }
+      {
+        mode = "n";
+        key = "<leader>bo";
+        action.__raw = "function() require('snacks').bufdelete.other() end";
+        options.desc = "[B]uffer delete [o]thers";
+      }
+      {
+        mode = ["n" "t"];
+        key = "<C-/>";
+        action.__raw = "function() require('snacks').terminal() end";
+        options.desc = "Toggle terminal";
+      }
+      {
+        # What most terminals send for <C-/>.
+        mode = ["n" "t"];
+        key = "<C-_>";
+        action.__raw = "function() require('snacks').terminal() end";
+        options.desc = "Toggle terminal";
       }
     ];
 

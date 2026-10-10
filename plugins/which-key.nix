@@ -3,6 +3,10 @@
     enable = true;
     settings.spec = [
       {
+        __unkeyed-1 = "<leader>b";
+        group = "[B]uffer";
+      }
+      {
         __unkeyed-1 = "<leader>c";
         group = "[C]ode";
       }
@@ -20,13 +24,14 @@
         group = "[F]ile";
       }
       {
+        __unkeyed-1 = "<leader>g";
+        group = "[G]it";
+        mode = ["n" "x"];
+      }
+      {
         __unkeyed-1 = "<leader>h";
         group = "Git [H]unk";
         mode = ["n" "v"];
-      }
-      {
-        __unkeyed-1 = "<leader>l";
-        group = "[L]azygit";
       }
       {
         __unkeyed-1 = "<leader>n";
