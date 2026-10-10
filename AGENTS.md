@@ -11,26 +11,30 @@ Personal Neovim configuration built with [nixvim](https://github.com/nix-communi
 | `just test` | Build + run `scripts/check-keymaps.lua` in headless nvim |
 | `just fmt` | Format Nix files with alejandra |
 | `just lint` | deadnix, statix, alejandra --check, keep-sorted lint |
-| `nix flake check` | `checks.nvim` (build) + `checks.keymaps` (same Lua contracts, sandboxed) |
+| `nix flake check` | `checks.nvim` (build) + `checks.keymaps` (same Lua contracts, sandboxed) + `checks.lint` (same as `just lint`) |
+| `nix fmt` | alejandra (flake `formatter` output) |
 
 The `.#nvim` package builds a self-contained binary that loads config via `-u <initFile>` — it does NOT depend on `~/.config/nvim`. This is the authoritative validation that the Nix config assembles and keymaps resolve.
 
 ## Architecture
 
 ```
-flake.nix          — flake outputs: packages.nvim, checks.{nvim,keymaps}, devShells, homeModules
+flake.nix          — flake outputs: packages.nvim, checks.{nvim,keymaps,lint}, formatter, devShells, homeModules (Linux systems only)
 nixvim.nix         — top-level nixvim config: options, diagnostics, keymaps, autocommands, plugin imports
 plugins/
-  kickstart/plugins/  — upstream kickstart.nixvim plugin ports (autopairs, indent-blankline, lint, neo-tree)
+  kickstart/plugins/  — upstream kickstart.nixvim plugin ports (autopairs, lint, neo-tree)
   custom/plugins/     — personal plugin configs (add new plugins here, import in nixvim.nix)
+  archive/            — retired plugin configs, not imported, kept for reference
   conform.nix, gitsigns.nix, lsp.nix, treesitter.nix, which-key.nix — core plugins
 scripts/check-keymaps.lua — headless contract checks (run by `just test` and `nix flake check`)
 scripts/test-keymaps.sh   — local wrapper: builds .#nvim, runs the Lua in a throwaway HOME
 ```
 
-Key plugin choices: `lsp.servers` (native `vim.lsp.config`, nvim-lspconfig only supplies default configs), blink.cmp, snacks.nvim (picker, dashboard, input, lazygit, image), lz.n lazy loading (`plugins.<name>.lazyLoad.settings` per plugin; `lzn-auto-require` makes `require()` in keymaps load lazy plugins), heirline statusline via `extraPlugins` (no nixvim module exists), vague colorscheme, nvim-web-devicons.
+Key plugin choices: `lsp.servers` (native `vim.lsp.config`, nvim-lspconfig only supplies default configs), blink.cmp, snacks.nvim (picker, dashboard, input, lazygit, image, indent, terminal, bufdelete, gitbrowse), lazygit as the only git UI, neo-tree as the file explorer, aerial + navic for symbols, grug-far for project search/replace, flash for jumps, lz.n lazy loading (`plugins.<name>.lazyLoad.settings` per plugin; `lzn-auto-require` makes `require()` in keymaps load lazy plugins), heirline statusline via `extraPlugins` (no nixvim module exists), vague colorscheme, nvim-web-devicons.
 
-Unimported files under `plugins/` are kept on purpose (previous experiments: telescope, fzf-lua, nvim-cmp, mini, dressing, carbonfox, cyberdream, zenburn, comment, lazygit, dashboard, noice, opencode, fff, nvim-lightbulb, zk). They are not part of the build.
+Retired configs live in `plugins/archive/` (telescope, fzf-lua, nvim-cmp, mini, dressing, carbonfox, cyberdream, zenburn, comment, lazygit, dashboard, noice, opencode, fff, nvim-lightbulb, zk, neogit, oil, spectre, neoscroll, indent-blankline). They are not imported and not part of the build; they are still linted.
+
+Symbol views are deliberately narrowed to aerial + navic for now; the Trouble symbols (`<leader>cs`) and snacks `lsp_symbols` (`gO`, `<leader>ds`) maps are commented out, not deleted, while the maintainer decides.
 
 ## Plugin workflow
 

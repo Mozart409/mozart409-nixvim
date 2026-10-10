@@ -5,9 +5,9 @@ My personal Neovim configuration, built with [nixvim](https://github.com/nix-com
 ## Features
 
 - Modular plugin configuration — each plugin lives in its own `.nix` file under `plugins/`
-- LSP via Neovim's native `vim.lsp.config` (nixvim `lsp.servers`), blink.cmp completion, Tree-sitter, snacks.nvim picker/dashboard/image, nvim-lint, conform formatting
+- LSP via Neovim's native `vim.lsp.config` (nixvim `lsp.servers`), blink.cmp completion, Tree-sitter + textobjects, snacks.nvim picker/dashboard/image/terminal, nvim-lint, conform formatting
 - Lazy-loaded plugins through `lz.n` (~55 ms headless startup)
-- Git integration (Neogit, Diffview, Gitsigns, lazygit), Oil + Neo-tree file explorers, Trouble diagnostics, heirline statusline, vague colorscheme
+- Git integration (lazygit, Gitsigns), Neo-tree file explorer, flash jumps, grug-far search/replace, Trouble diagnostics, heirline statusline, vague colorscheme
 - Nerd Font icons via nvim-web-devicons
 - Wayland and X11 clipboard support
 - Headless contract tests (`just test` / `nix flake check`) that verify keymaps resolve and startup is error-free
@@ -24,7 +24,8 @@ My personal Neovim configuration, built with [nixvim](https://github.com/nix-com
 - [ripgrep](https://github.com/BurntSushi/ripgrep)
 - Clipboard tool (`wl-clipboard` on Wayland, `xclip`/`xsel` on X11)
 - A terminal with the kitty graphics protocol (kitty, WezTerm, Ghostty) for inline images
-- Project toolchains from your devShell where the config deliberately doesn't ship them: `rustc`/`cargo`/`rustfmt` (rust-analyzer prefers the one on `$PATH`), `nodejs`
+- Project toolchains from your devShell where the config deliberately doesn't ship them: `rustc`/`cargo` (rust-analyzer prefers the one on `$PATH`), `nodejs`. `rustfmt` and `goimports` ship as fallbacks appended to `$PATH`, so a devShell's own versions still win
+- `lazygit` on `$PATH` for the `<leader>g` maps
 
 The Home Manager module evaluates without `allowUnfree`.
 
@@ -132,6 +133,26 @@ Rebuild with:
 ```sh
 home-manager switch
 ```
+
+## Keymaps
+
+Leader is `<Space>`. `<leader>sk` searches every keymap; which-key shows the groups as you type.
+
+| Group | Keys |
+|---|---|
+| Search `<leader>s` | `sf` files, `sg` grep, `sw` word, `sh` help, `sk` keymaps, `sd` diagnostics, `st` TODO comments, `sr` resume, `s.` recent, `s/` grep open buffers, `ss` pickers; `<leader><leader>` buffers, `<leader>/` lines |
+| Git `<leader>g` | `gg` lazygit, `gl` log, `gf` current file history, `gb` open on remote (normal or visual selection) |
+| Git hunks `<leader>h` | `hs`/`hr` stage/reset hunk, `hS`/`hR` buffer, `hp`/`hi` preview, `hb` blame, `hd`/`hD` diff; `]c`/`[c` next/prev hunk |
+| Buffer `<leader>b` | `bd` delete, `bo` delete others |
+| Code / LSP | `<leader>ca` code action, `<leader>rn` rename, `<leader>m` format, `<leader>D` type definition, `<leader>ws` workspace symbols, `<leader>a` aerial, `gd`/`grr`/`gri`/`grt` pickers |
+| Diagnostics `<leader>x` | `xx`/`xX` Trouble (all/buffer), `xL` loclist, `xQ` quickfix; `<leader>q` diagnostics to loclist |
+| Files | `<leader>fe` / `<leader>e` neo-tree reveal |
+| Search & replace | `<leader>S` grug-far (word under cursor, or visual selection) |
+| Toggle `<leader>t` | `tb` line blame, `tw` word diff, `th` inlay hints, `tp` precognition |
+| Docs `<leader>n` | `nf`/`nc`/`nt`/`ng` Neogen |
+| Motions | `s` flash jump, `S` flash treesitter, `r`/`R` remote/treesitter search (operator-pending); `]f`/`[f` and `]F`/`[F` function start/end, `]t`/`[t` TODOs |
+| Textobjects | `af`/`if` function, `ac`/`ic` class, `aa`/`ia` argument |
+| Terminal | `<C-/>` toggle, `<Esc><Esc>` leave terminal mode |
 
 ## Customization
 
