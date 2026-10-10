@@ -40,6 +40,7 @@ local expected_maps = {
   ["<leader>cs"]  = "trouble symbols",
   ["<leader>a"]   = "aerial symbols toggle",
   ["<leader>S"]   = "spectre",
+  ["<leader>q"]   = "diagnostics to loclist (global, not LSP-only)",
   ["<leader>lg"]  = "lazygit",
   ["s"]           = "flash jump",
   ["S"]           = "flash treesitter",

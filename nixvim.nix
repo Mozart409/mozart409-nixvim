@@ -168,6 +168,12 @@
       }
       {
         mode = "n";
+        key = "<leader>q";
+        action.__raw = "vim.diagnostic.setloclist";
+        options.desc = "Open diagnostic [Q]uickfix list";
+      }
+      {
+        mode = "n";
         key = "<Esc>";
         action = "<cmd>nohlsearch<CR>";
       }

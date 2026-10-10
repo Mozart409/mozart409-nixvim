@@ -48,11 +48,6 @@ _: {
 
       keymaps = [
         {
-          key = "<leader>q";
-          action.__raw = "vim.diagnostic.setloclist";
-          options.desc = "Open diagnostic [Q]uickfix list";
-        }
-        {
           key = "gd";
           action.__raw = "function() require('snacks').picker.lsp_definitions() end";
           options.desc = "LSP: [G]oto [D]efinition";
