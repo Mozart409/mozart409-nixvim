@@ -1,6 +1,7 @@
 {
   programs.nixvim.plugins.which-key = {
     enable = true;
+    lazyLoad.settings.event = ["DeferredUIEnter"];
     settings.spec = [
       {
         __unkeyed-1 = "<leader>b";

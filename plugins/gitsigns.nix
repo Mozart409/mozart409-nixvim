@@ -1,6 +1,7 @@
 {
   programs.nixvim.plugins.gitsigns = {
     enable = true;
+    lazyLoad.settings.event = ["BufReadPost" "BufNewFile" "BufWritePre"];
     settings = {
       signs = {
         add.text = "+";

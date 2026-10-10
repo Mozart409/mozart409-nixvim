@@ -1,6 +1,10 @@
 _: {
   programs.nixvim.plugins.todo-comments = {
     enable = true;
+    lazyLoad.settings = {
+      event = ["BufReadPost" "BufNewFile" "BufWritePre"];
+      cmd = ["TodoTrouble" "TodoQuickFix" "TodoLocList"];
+    };
     settings = {
       signs = true;
       sign_priority = 8;
