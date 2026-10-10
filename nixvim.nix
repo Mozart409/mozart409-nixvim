@@ -67,9 +67,6 @@
     dependencies.git.package = pkgs.gitMinimal;
 
     performance.byteCompileLua.enable = true;
-    extraPlugins = with pkgs.vimPlugins; [
-      plenary-nvim
-    ];
 
     globals = {
       mapleader = " ";
