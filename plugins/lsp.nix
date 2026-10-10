@@ -1,4 +1,4 @@
-_: {
+{pkgs, ...}: {
   programs.nixvim = {
     plugins.lspconfig.enable = true;
 
@@ -29,7 +29,13 @@ _: {
             diagnostics.disable = ["missing-fields"];
           };
         };
-        nil_ls.enable = true;
+        nixd = {
+          enable = true;
+          config.settings.nixd = {
+            nixpkgs.expr = "import ${pkgs.path} { }";
+            formatting.command = ["alejandra"];
+          };
+        };
         postgres_lsp.enable = true;
         protols.enable = true;
         pyright.enable = true;
