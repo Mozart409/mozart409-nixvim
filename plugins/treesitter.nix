@@ -1,18 +1,9 @@
 {pkgs, ...}: {
   programs.nixvim = {
-    extraPackages = with pkgs; [
-      tree-sitter
-    ];
     plugins.treesitter = {
       enable = true;
-      highlight = {
-        enable = true;
-        enableVimSyntax = ["ruby"];
-      };
-      indent = {
-        enable = true;
-        disable = ["ruby"];
-      };
+      highlight.enable = true;
+      indent.enable = true;
       grammarPackages = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
         # keep-sorted start
         bash
