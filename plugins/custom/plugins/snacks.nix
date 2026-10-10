@@ -260,7 +260,6 @@
         };
         notifier = {
           enabled = false;
-          timeout = 3000;
         };
 
         statuscolumn = {

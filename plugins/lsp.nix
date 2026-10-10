@@ -2,11 +2,6 @@ _: {
   programs.nixvim = {
     plugins.lspconfig.enable = true;
 
-    plugins.fidget = {
-      enable = true;
-      lazyLoad.settings.event = ["LspAttach"];
-    };
-
     lsp = {
       inlayHints.enable = false;
 
