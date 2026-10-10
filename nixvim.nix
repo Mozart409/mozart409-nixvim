@@ -12,7 +12,6 @@
     ./plugins/custom/plugins/inc-rename.nix
     ./plugins/custom/plugins/lz-n.nix
     ./plugins/custom/plugins/neogen.nix
-    ./plugins/custom/plugins/neogit.nix
     ./plugins/custom/plugins/neoscroll.nix
     ./plugins/custom/plugins/nvim-bqf.nix
     ./plugins/custom/plugins/nvim-colorizer.nix
@@ -66,7 +65,7 @@
     withRuby = false;
     withPython3 = false;
 
-    # gitsigns/neogit/snacks only shell out to plain git; full git drags in
+    # gitsigns/snacks only shell out to plain git; full git drags in
     # perl for git-p4, gitweb and send-email.
     dependencies.git.package = pkgs.gitMinimal;
 
