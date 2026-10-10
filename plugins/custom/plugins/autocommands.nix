@@ -8,6 +8,7 @@
     {
       event = "FileType";
       pattern = [
+        "gitcommit"
         "tex"
         "latex"
         "markdown"
