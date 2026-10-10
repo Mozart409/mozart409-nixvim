@@ -26,7 +26,6 @@ local expected_pickers = {
   ["<leader><leader>"] = "buffers",
   ["<leader>/"]        = "lines",
   ["<leader>s/"]       = "grep_buffers",
-  ["<leader>sn"]       = "files",
 }
 
 -- CONTRACT 2: these maps must exist and have an action. No picker involved —

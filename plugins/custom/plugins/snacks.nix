@@ -114,18 +114,6 @@
       }
       {
         mode = "n";
-        key = "<leader>sn";
-        action.__raw = ''
-          function()
-            require('snacks').picker.files({ cwd = vim.fn.stdpath("config") })
-          end
-        '';
-        options = {
-          desc = "[S]earch [N]eovim files";
-        };
-      }
-      {
-        mode = "n";
         key = "<leader>lg";
         action.__raw = "function() require('snacks').lazygit() end";
         options = {
@@ -192,12 +180,6 @@
                 key = "r";
                 desc = "Recent Files";
                 action = ":lua Snacks.dashboard.pick('oldfiles')";
-              }
-              {
-                icon = " ";
-                key = "c";
-                desc = "Config";
-                action = ":lua Snacks.dashboard.pick('files', { cwd = vim.fn.stdpath('config') })";
               }
               {
                 icon = " ";
