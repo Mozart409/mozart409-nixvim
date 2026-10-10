@@ -66,7 +66,12 @@
     # perl for git-p4, gitweb and send-email.
     dependencies.git.package = pkgs.gitMinimal;
 
-    performance.byteCompileLua.enable = true;
+    performance.byteCompileLua = {
+      enable = true;
+      plugins = true;
+      nvimRuntime = true;
+      luaLib = true;
+    };
 
     globals = {
       mapleader = " ";
