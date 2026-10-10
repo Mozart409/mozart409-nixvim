@@ -12,7 +12,6 @@
         openexrSupport = false;
       })
       fd
-      trashy
     ];
 
     keymaps = [
@@ -234,15 +233,6 @@
               '';
             }
           ];
-        };
-
-        explorer = {
-          enabled = false;
-          replace_netrw = true;
-          follow_file = true;
-          watch = true;
-          finder = "explorer";
-          supports_live = true;
         };
 
         gitbrowse = {

@@ -16,7 +16,6 @@
     ./plugins/custom/plugins/nvim-bqf.nix
     ./plugins/custom/plugins/nvim-colorizer.nix
     ./plugins/custom/plugins/nvim-navic.nix
-    ./plugins/custom/plugins/oil.nix
     ./plugins/custom/plugins/precognition.nix
     ./plugins/custom/plugins/schemastore.nix
     ./plugins/custom/plugins/snacks.nix

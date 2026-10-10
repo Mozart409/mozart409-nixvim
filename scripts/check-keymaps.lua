@@ -55,7 +55,6 @@ local expected_maps = {
   ["<leader>xL"]  = "trouble location list",
   ["<leader>xQ"]  = "trouble quickfix list",
   ["grn"]         = "inc-rename on the builtin rename key",
-  ["-"]           = "oil parent directory",
   ["]t"]          = "next todo comment",
   ["[t"]          = "previous todo comment",
 }
