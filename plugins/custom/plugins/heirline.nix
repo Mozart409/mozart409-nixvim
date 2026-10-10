@@ -15,6 +15,13 @@
             diag_warn = utils.get_highlight('DiagnosticWarn').fg,
             diag_info = utils.get_highlight('DiagnosticInfo').fg,
             diag_hint = utils.get_highlight('DiagnosticHint').fg,
+            mode_normal = utils.get_highlight('Function').fg,
+            mode_insert = utils.get_highlight('String').fg,
+            mode_visual = utils.get_highlight('Statement').fg,
+            mode_replace = utils.get_highlight('DiagnosticError').fg,
+            mode_command = utils.get_highlight('Constant').fg,
+            mode_terminal = utils.get_highlight('Special').fg,
+            modified = utils.get_highlight('DiagnosticWarn').fg,
           }
         end
         local Space = { provider = ' ' }
@@ -33,12 +40,19 @@
               c = 'C', cv = 'C', r = 'R', rm = 'R', ['r?'] = 'R',
               ['!'] = '!', t = 'T',
             },
+            mode_colors = {
+              N = 'mode_normal', I = 'mode_insert', V = 'mode_visual', S = 'mode_visual',
+              R = 'mode_replace', C = 'mode_command', ['!'] = 'mode_terminal', T = 'mode_terminal',
+            },
           },
           provider = function(self)
             local name = self.mode_names[self.mode] or self.mode
             return '  ' .. name .. ' '
           end,
-          hl = { bold = true },
+          hl = function(self)
+            local name = self.mode_names[self.mode] or 'N'
+            return { fg = self.mode_colors[name] or 'mode_normal', bold = true }
+          end,
           update = { 'ModeChanged' },
         }
         local Git = {
@@ -56,6 +70,11 @@
             return vim.fn.fnamemodify(name, ':t')
           end,
           hl = { bold = true },
+        }
+        local Modified = {
+          condition = function() return vim.bo.modified end,
+          provider = ' [+]',
+          hl = { fg = 'modified', bold = true },
         }
         local diag_cfg = vim.diagnostic.config()
         local diag_signs = diag_cfg and diag_cfg.signs
@@ -124,7 +143,7 @@
         } or nil
 
         require('heirline').setup({
-          statusline = { ViMode, Space, Git, FileName, Space, Diagnostics, Align, LSPActive, Ruler },
+          statusline = { ViMode, Space, Git, FileName, Modified, Space, Diagnostics, Align, LSPActive, Ruler },
           winbar = Breadcrumbs and { Breadcrumbs } or nil,
           opts = {
             colors = setup_colors,
