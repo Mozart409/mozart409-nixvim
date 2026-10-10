@@ -87,7 +87,22 @@
           nvim --headless -c "luafile scripts/check-keymaps.lua"
           touch $out
         '';
+
+      # Static checks — the same set `just lint` runs.
+      lint =
+        pkgs.runCommand "nixvim-lint" {
+          nativeBuildInputs = with pkgs; [alejandra deadnix keep-sorted statix];
+        } ''
+          cd ${self}
+          deadnix --fail .
+          statix check .
+          alejandra --check .
+          keep-sorted --mode lint $(find . -name '*.nix') justfile lefthook.yml
+          touch $out
+        '';
     });
+
+    formatter = forAllSystems (pkgs: pkgs.alejandra);
 
     devShells = forAllSystems (pkgs: {
       default = pkgs.mkShell {
