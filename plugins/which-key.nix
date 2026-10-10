@@ -10,10 +10,11 @@
         __unkeyed-1 = "<leader>C";
         group = "[C]rates";
       }
-      {
-        __unkeyed-1 = "<leader>d";
-        group = "[D]ocument";
-      }
+      # Empty while <leader>ds is commented out in lsp.nix.
+      # {
+      #   __unkeyed-1 = "<leader>d";
+      #   group = "[D]ocument";
+      # }
       {
         __unkeyed-1 = "<leader>f";
         group = "[F]ile";

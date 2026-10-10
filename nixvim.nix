@@ -146,12 +146,13 @@
         action = "<cmd>Trouble diagnostics toggle filter.buf=0<cr>";
         options.desc = "Buffer Diagnostics (Trouble)";
       }
-      {
-        mode = "n";
-        key = "<leader>cs";
-        action = "<cmd>Trouble symbols toggle focus=false<cr>";
-        options.desc = "Symbols (Trouble)";
-      }
+      # Symbol views: aerial + navic for now; deciding between these later.
+      # {
+      #   mode = "n";
+      #   key = "<leader>cs";
+      #   action = "<cmd>Trouble symbols toggle focus=false<cr>";
+      #   options.desc = "Symbols (Trouble)";
+      # }
       {
         mode = "n";
         key = "<leader>xL";

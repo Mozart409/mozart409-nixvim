@@ -36,7 +36,6 @@ local expected_maps = {
   ["<leader>fe"]  = "file explorer reveal (neo-tree)",
   ["<leader>e"]   = "file explorer reveal, short alias",
   ["<leader>m"]   = "conform format buffer",
-  ["<leader>cs"]  = "trouble symbols",
   ["<leader>a"]   = "aerial symbols toggle",
   ["<leader>S"]   = "spectre",
   ["<leader>q"]   = "diagnostics to loclist (global, not LSP-only)",

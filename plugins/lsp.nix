@@ -72,11 +72,12 @@ _: {
           action.__raw = "function() require('snacks').picker.lsp_type_definitions() end";
           options.desc = "LSP: Goto [T]ype definition";
         }
-        {
-          key = "gO";
-          action.__raw = "function() require('snacks').picker.lsp_symbols() end";
-          options.desc = "LSP: Document symbols";
-        }
+        # Symbol views: aerial + navic for now; deciding between these later.
+        # {
+        #   key = "gO";
+        #   action.__raw = "function() require('snacks').picker.lsp_symbols() end";
+        #   options.desc = "LSP: Document symbols";
+        # }
         {
           key = "gra";
           lspBufAction = "code_action";
@@ -92,11 +93,11 @@ _: {
           action.__raw = "function() require('snacks').picker.lsp_type_definitions() end";
           options.desc = "LSP: Type [D]efinition";
         }
-        {
-          key = "<leader>ds";
-          action.__raw = "function() require('snacks').picker.lsp_symbols() end";
-          options.desc = "LSP: [D]ocument [S]ymbols";
-        }
+        # {
+        #   key = "<leader>ds";
+        #   action.__raw = "function() require('snacks').picker.lsp_symbols() end";
+        #   options.desc = "LSP: [D]ocument [S]ymbols";
+        # }
         {
           key = "<leader>ws";
           action.__raw = "function() require('snacks').picker.lsp_workspace_symbols() end";
