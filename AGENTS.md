@@ -32,7 +32,7 @@ scripts/test-keymaps.sh   — local wrapper: builds .#nvim, runs the Lua in a th
 
 Key plugin choices: `lsp.servers` (native `vim.lsp.config`, nvim-lspconfig only supplies default configs), blink.cmp, snacks.nvim (picker, dashboard, input, lazygit, image, indent, terminal, bufdelete, gitbrowse), lazygit as the only git UI, neo-tree as the file explorer, aerial + navic for symbols, grug-far for project search/replace, flash for jumps, lz.n lazy loading (`plugins.<name>.lazyLoad.settings` per plugin; `lzn-auto-require` makes `require()` in keymaps load lazy plugins), heirline statusline via `extraPlugins` (no nixvim module exists), vague colorscheme, nvim-web-devicons.
 
-Retired configs live in `plugins/archive/` (telescope, fzf-lua, nvim-cmp, mini, dressing, carbonfox, cyberdream, zenburn, comment, lazygit, dashboard, noice, opencode, fff, nvim-lightbulb, zk, neogit, oil, spectre, neoscroll, indent-blankline). They are not imported and not part of the build; they are still linted.
+Retired configs live in `plugins/archive/` (telescope, fzf-lua, nvim-cmp, mini, dressing, carbonfox, cyberdream, zenburn, comment, lazygit, dashboard, noice, opencode, fff, nvim-lightbulb, zk, neogit, oil, spectre, neoscroll, indent-blankline, typescript-tools). They are not imported and not part of the build; they are still linted.
 
 Symbol views are deliberately narrowed to aerial + navic for now; the Trouble symbols (`<leader>cs`) and snacks `lsp_symbols` (`gO`, `<leader>ds`) maps are commented out, not deleted, while the maintainer decides.
 

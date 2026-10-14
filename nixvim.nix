@@ -23,7 +23,6 @@
     ./plugins/custom/plugins/todo-comments.nix
     ./plugins/custom/plugins/treesitter-textobjects.nix
     ./plugins/custom/plugins/trouble.nix
-    ./plugins/custom/plugins/typescript-tools.nix
     ./plugins/custom/plugins/vague.nix
     ./plugins/gitsigns.nix
     ./plugins/kickstart/plugins/autopairs.nix
