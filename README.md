@@ -25,7 +25,7 @@ My personal Neovim configuration, built with [nixvim](https://github.com/nix-com
 - Clipboard tool (`wl-clipboard` on Wayland, `xclip`/`xsel` on X11)
 - A terminal with the kitty graphics protocol (kitty, WezTerm, Ghostty) for inline images
 - Project toolchains from your devShell where the config deliberately doesn't ship them: `rustc`/`cargo` (rust-analyzer prefers the one on `$PATH`), `nodejs`. `rustfmt` and `goimports` ship as fallbacks appended to `$PATH`, so a devShell's own versions still win
-- `lazygit` on `$PATH` for the `<leader>g` maps
+- `lazygit` on `$PATH` for `<leader>lg` and the `<leader>g` maps
 
 The Home Manager module evaluates without `allowUnfree`.
 
@@ -141,7 +141,7 @@ Leader is `<Space>`. `<leader>sk` searches every keymap; which-key shows the gro
 | Group | Keys |
 |---|---|
 | Search `<leader>s` | `sf` files, `sg` grep, `sw` word, `sh` help, `sk` keymaps, `sd` diagnostics, `st` TODO comments, `sr` resume, `s.` recent, `s/` grep open buffers, `ss` pickers; `<leader><leader>` buffers, `<leader>/` lines |
-| Git `<leader>g` | `gg` lazygit, `gl` log, `gf` current file history, `gb` open on remote (normal or visual selection) |
+| Git `<leader>g` | `<leader>lg` lazygit, `gl` log, `gf` current file history, `gb` open on remote (normal or visual selection) |
 | Git hunks `<leader>h` | `hs`/`hr` stage/reset hunk, `hS`/`hR` buffer, `hp`/`hi` preview, `hb` blame, `hd`/`hD` diff; `]c`/`[c` next/prev hunk |
 | Buffer `<leader>b` | `bd` delete, `bo` delete others |
 | Code / LSP | `<leader>ca` code action, `<leader>rn` rename, `<leader>m` format, `<leader>D` type definition, `<leader>ws` workspace symbols, `<leader>a` aerial, `gd`/`grr`/`gri`/`grt` pickers |

@@ -125,9 +125,9 @@
       }
       {
         mode = "n";
-        key = "<leader>gg";
+        key = "<leader>lg";
         action.__raw = "function() require('snacks').lazygit() end";
-        options.desc = "[G]it: lazy[g]it";
+        options.desc = "[L]azy[g]it";
       }
       {
         mode = "n";

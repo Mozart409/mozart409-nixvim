@@ -35,6 +35,10 @@
         mode = ["n" "v"];
       }
       {
+        __unkeyed-1 = "<leader>l";
+        group = "[L]azygit";
+      }
+      {
         __unkeyed-1 = "<leader>n";
         group = "[N]eogen";
       }
