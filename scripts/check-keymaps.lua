@@ -7,6 +7,7 @@
 --   2b. maps the config deliberately removes at VimEnter are really gone
 --   2c. pressing the lazygit maps calls the Snacks.lazygit entry point they claim to
 --   2d. pressing the file explorer maps really opens neo-tree
+--   2e. neo-tree lists .env files even though they are dotfiles
 --   3. no <leader> map is a strict prefix of another (timeoutlen stalls)
 --   4. startup leaves no errors or deprecation notices in :messages
 --   5. the statusline renders with a diagnostic of every severity present
@@ -95,6 +96,10 @@ local expected_windows = {
   ["<leader>fe"] = "neo-tree",
   ["<leader>e"]  = "neo-tree",
 }
+
+-- CONTRACT 2e: neo-tree must list these files in a fresh directory even
+-- though they are dotfiles (filesystem.filtered_items.always_show_by_pattern).
+local expected_neo_tree_files = { ".env", ".env.local" }
 
 -- CONTRACT 3: no <leader> map may be a strict prefix of another <leader> map.
 -- When it is, the shorter one stalls for `timeoutlen` on every press while nvim
@@ -241,6 +246,42 @@ for _, key in ipairs(window_keys) do
   end
 end
 
+-- Contract 2e -------------------------------------------------------------
+local env_dir = vim.fn.tempname()
+vim.fn.mkdir(env_dir, "p")
+for _, name in ipairs(expected_neo_tree_files) do
+  vim.fn.writefile({ "X=1" }, env_dir .. "/" .. name)
+end
+local function neo_tree_lines()
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    local buf = vim.api.nvim_win_get_buf(win)
+    if vim.bo[buf].filetype == "neo-tree" then
+      return table.concat(vim.api.nvim_buf_get_lines(buf, 0, -1, false), "\n")
+    end
+  end
+end
+local function lists_all(text)
+  text = "\n" .. text .. "\n"
+  for _, name in ipairs(expected_neo_tree_files) do
+    -- Whitespace on both sides, so ".env" can't match inside ".env.local".
+    if not text:find("%s" .. vim.pesc(name) .. "%s") then return false end
+  end
+  return true
+end
+local ok_tree, tree_err = pcall(vim.cmd, "Neotree dir=" .. vim.fn.fnameescape(env_dir))
+local listed = ok_tree and vim.wait(3000, function()
+  local text = neo_tree_lines()
+  return text ~= nil and lists_all(text)
+end, 20)
+if not ok_tree then
+  fails[#fails + 1] = "neo-tree .env files  : :Neotree errored: " .. tostring(tree_err)
+elseif not listed then
+  fails[#fails + 1] = "neo-tree .env files  : expected " .. table.concat(expected_neo_tree_files, ", ")
+    .. " listed, tree showed: " .. vim.inspect(neo_tree_lines())
+end
+pcall(vim.cmd, "Neotree close")
+vim.fn.delete(env_dir, "rf")
+
 -- Contract 3 --------------------------------------------------------------
 table.sort(leader_lhs)
 local collisions = 0
@@ -307,7 +348,7 @@ if #fails > 0 then
   vim.cmd("cquit 1")
 else
   io.stdout:write(string.format(
-    "PASS: %d picker keymaps resolve, %d keymaps present, %d lazygit maps wired, %d window maps open, %d <leader> maps free of prefix collisions, startup clean, statusline renders diagnostics\n",
+    "PASS: %d picker keymaps resolve, %d keymaps present, %d lazygit maps wired, %d window maps open, neo-tree shows .env, %d <leader> maps free of prefix collisions, startup clean, statusline renders diagnostics\n",
     #picker_keys, #map_keys, #lazygit_keys, #window_keys, #leader_lhs))
   vim.cmd("quitall")
 end

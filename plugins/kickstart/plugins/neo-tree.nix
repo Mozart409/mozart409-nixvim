@@ -7,6 +7,9 @@
         auto_clean_after_session_restore = true;
         close_if_last_window = true;
         filesystem = {
+          # .env is a dotfile and usually gitignored, so `H` alone did not
+          # reliably reveal it. always_show wins over both filters.
+          filtered_items.always_show_by_pattern = [".env*"];
           hijack_netrw_behavior = "open_default";
           use_libuv_file_watcher = true;
           window.mappings."\\" = "close_window";
