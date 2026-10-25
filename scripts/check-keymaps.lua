@@ -5,6 +5,8 @@
 --   1. every <leader> search map calls the snacks.picker source it claims to
 --   2. every listed map exists and has an action (nothing silently vanished)
 --   2b. maps the config deliberately removes at VimEnter are really gone
+--   2c. pressing the lazygit maps calls the Snacks.lazygit entry point they claim to
+--   2d. pressing the file explorer maps really opens neo-tree
 --   3. no <leader> map is a strict prefix of another (timeoutlen stalls)
 --   4. startup leaves no errors or deprecation notices in :messages
 --   5. the statusline renders with a diagnostic of every severity present
@@ -46,7 +48,7 @@ local expected_maps = {
   ["<leader>a"]   = "aerial symbols toggle",
   ["<leader>S"]   = "grug-far search and replace",
   ["<leader>q"]   = "diagnostics to loclist (global, not LSP-only)",
-  ["<leader>gg"]  = "lazygit",
+  ["<leader>lg"]  = "lazygit",
   ["<leader>gl"]  = "lazygit log",
   ["<leader>gf"]  = "lazygit file history",
   ["<leader>gb"]  = "git browse",
@@ -78,6 +80,22 @@ local expected_absent = {
   ["<leader>yd2"] = "d2-vim default map, deleted in d2.nix",
 }
 
+-- CONTRACT 2c: pressing these keys must call the named Snacks.lazygit entry
+-- point. Snacks.lazygit is stubbed for the press, so lazygit never launches
+-- (the binary isn't in the check sandbox). "" means Snacks.lazygit() itself.
+local expected_lazygit = {
+  ["<leader>lg"] = "",
+  ["<leader>gl"] = "log",
+  ["<leader>gf"] = "log_file",
+}
+
+-- CONTRACT 2d: pressing these keys must open a window of this filetype. The
+-- real plugin runs; the window is closed again afterwards.
+local expected_windows = {
+  ["<leader>fe"] = "neo-tree",
+  ["<leader>e"]  = "neo-tree",
+}
+
 -- CONTRACT 3: no <leader> map may be a strict prefix of another <leader> map.
 -- When it is, the shorter one stalls for `timeoutlen` on every press while nvim
 -- waits to see if the longer one is coming (this is what <leader>f = format vs
@@ -91,6 +109,8 @@ local function run_checks()
 local leader = vim.g.mapleader or "\\"
 local function expand(key) return (key:gsub("<leader>", leader)) end
 local function pretty(lhs) return "<leader>" .. lhs:sub(#leader + 1) end
+-- Captured before the key presses below reset it; contract 4 checks it.
+local startup_errmsg = vim.v.errmsg
 
 local ok_snacks, snacks = pcall(require, "snacks")
 if not ok_snacks then
@@ -111,6 +131,16 @@ end
 local fails = {}
 local function has_action(m)
   return m.callback ~= nil or (m.rhs ~= nil and m.rhs ~= "")
+end
+-- Type the keys as a user would (remappable, executed before returning), so the
+-- real map dispatch runs rather than a direct call of its callback. Returns an
+-- error string, or nil when the press left no error behind.
+local function press(key)
+  vim.v.errmsg = ""
+  local keys = vim.api.nvim_replace_termcodes(expand(key), true, false, true)
+  local ok, err = pcall(vim.api.nvim_feedkeys, keys, "mx", false)
+  if not ok then return tostring(err) end
+  if vim.v.errmsg ~= "" then return vim.v.errmsg end
 end
 local function sorted_keys(t)
   local keys = {}
@@ -158,6 +188,59 @@ for _, key in ipairs(sorted_keys(expected_absent)) do
   end
 end
 
+-- Contract 2c -------------------------------------------------------------
+local lazygit_keys = sorted_keys(expected_lazygit)
+local real_lazygit = snacks.lazygit
+for _, key in ipairs(lazygit_keys) do
+  local want = expected_lazygit[key]
+  local called
+  local function record(name) return function() called = name end end
+  snacks.lazygit = setmetatable(
+    { log = record("log"), log_file = record("log_file") },
+    { __call = record("") })
+  if not existing[expand(key)] then
+    fails[#fails + 1] = key .. "  : not mapped (lazygit)"
+  else
+    local press_err = press(key)
+    if press_err then
+      fails[#fails + 1] = key .. "  : pressing it errored: " .. press_err
+    elseif called ~= want then
+      local function label(name) return "Snacks.lazygit" .. (name == "" and "()" or "." .. name .. "()") end
+      fails[#fails + 1] = key .. "  : expected " .. label(want) .. ", got "
+        .. (called and label(called) or "no lazygit call")
+    end
+  end
+end
+snacks.lazygit = real_lazygit
+
+-- Contract 2d -------------------------------------------------------------
+local window_keys = sorted_keys(expected_windows)
+for _, key in ipairs(window_keys) do
+  local ft = expected_windows[key]
+  local function find_windows()
+    local wins = {}
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+      if vim.bo[vim.api.nvim_win_get_buf(win)].filetype == ft then wins[#wins + 1] = win end
+    end
+    return wins
+  end
+  if not existing[expand(key)] then
+    fails[#fails + 1] = key .. "  : not mapped (opens " .. ft .. ")"
+  else
+    local press_err = press(key)
+    -- Plugins may render asynchronously; vim.wait keeps the event loop running.
+    local opened = vim.wait(3000, function() return #find_windows() > 0 end, 20)
+    if press_err then
+      fails[#fails + 1] = key .. "  : pressing it errored: " .. press_err
+    elseif not opened then
+      fails[#fails + 1] = key .. "  : pressed, but no " .. ft .. " window opened"
+    end
+    for _, win in ipairs(find_windows()) do
+      if #vim.api.nvim_list_wins() > 1 then pcall(vim.api.nvim_win_close, win, true) end
+    end
+  end
+end
+
 -- Contract 3 --------------------------------------------------------------
 table.sort(leader_lhs)
 local collisions = 0
@@ -184,8 +267,8 @@ for line in (messages .. "\n"):gmatch("([^\n]*)\n") do
     fails[#fails + 1] = "startup message  : " .. line
   end
 end
-if vim.v.errmsg ~= "" then
-  fails[#fails + 1] = "v:errmsg  : " .. vim.v.errmsg
+if startup_errmsg ~= "" then
+  fails[#fails + 1] = "v:errmsg  : " .. startup_errmsg
 end
 
 -- Contract 5 --------------------------------------------------------------
@@ -224,8 +307,8 @@ if #fails > 0 then
   vim.cmd("cquit 1")
 else
   io.stdout:write(string.format(
-    "PASS: %d picker keymaps resolve, %d keymaps present, %d <leader> maps free of prefix collisions, startup clean, statusline renders diagnostics\n",
-    #picker_keys, #map_keys, #leader_lhs))
+    "PASS: %d picker keymaps resolve, %d keymaps present, %d lazygit maps wired, %d window maps open, %d <leader> maps free of prefix collisions, startup clean, statusline renders diagnostics\n",
+    #picker_keys, #map_keys, #lazygit_keys, #window_keys, #leader_lhs))
   vim.cmd("quitall")
 end
 end

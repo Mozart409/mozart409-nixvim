@@ -48,6 +48,8 @@ Runs after `VimEnter` in a temporary HOME, never touches real config. Contracts:
 1. Every `<leader>` map listed in the expected pickers table calls its declared `snacks.picker` source
 2. Every expected keymap is actually mapped and has an action (LSP maps are buffer-local on attach and are not listed)
 2b. Maps the config deliberately deletes (d2-vim defaults) are absent
+2c. Pressing the lazygit maps (`<leader>lg`, `<leader>gl`, `<leader>gf`) calls their `Snacks.lazygit` entry point (stubbed, so lazygit never launches)
+2d. Pressing `<leader>fe` / `<leader>e` really opens a neo-tree window
 3. No `<leader>` key is a prefix of another `<leader>` key (avoids `timeoutlen` stalls)
 4. `:messages` contains no errors or deprecation notices after startup
 5. The heirline statusline evaluates with a diagnostic of every severity set (the Diagnostics component is condition-gated, so its highlights are otherwise never exercised at startup)
